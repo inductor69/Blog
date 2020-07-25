@@ -1,6 +1,6 @@
 # Blog
 
-# hackacad.in
+## hackacad.in
 
 Source code for my personal website built with GatsbyJS.
 
