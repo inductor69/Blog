@@ -1,0 +1,303 @@
+---
+slug: 'js-guide'
+title: 'DS In JS [Part-1]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-1].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Introduction (☝️)
+
+I found this strange (😑) because many of the job opportunities for software engineering and development today require JavaScript knowledge; it is the only language that can be used to write the entire stack, including the front end and back end. (👌).
+JavaScript follows the prototypal inheritance pattern, unlike Java and C/C++ which follow the inheritance pattern only, there are some changes in writing data structures in JavaScript. The inheritance pattern allows inheritance by creating a blueprint-like form that objects follow during inheritance. Here is an example of inherentance in Java,
+
+---
+
+
+# Inheretance in Java:
+
+```java
+class Teacher {
+   String designation = "Teacher";
+   String collegeName = "Beginnersbook";
+   void does(){
+    System.out.println("Teaching");
+   }
+}
+
+public class PhysicsTeacher extends Teacher{
+   String mainSubject = "Physics";
+   public static void main(String args[]){
+    PhysicsTeacher obj = new PhysicsTeacher();
+    System.out.println(obj.collegeName);
+    System.out.println(obj.designation);
+    System.out.println(obj.mainSubject);
+    obj.does();
+   }
+}
+```
+### 👉 Output:
+```java
+Beginnersbook
+Teacher
+Physics
+Teaching
+```
+However, the prototypal inheritance pattern means copying the objects (📝📝) and changing their properties. Here is an example of prototype in JavaScript,
+
+# Inheretance in JavaScript:
+```javascript
+var animal = {
+    legs: 4,
+    walk: function() {
+        console.log('walking on ' + this.legs + ' legs');
+    }
+}
+
+var bird = object(animal);
+
+bird.legs = 2;
+bird.fly = function() {
+    console.log('flying');
+}
+
+bird.walk(); // walking on 2 legs
+bird.fly(); // flying
+
+```
+### 👉 Output:
+```javascript
+walking on 2 legs
+flying
+```
+
+***
+
+
+# Part 01: Big-O Notation:
+
+By the end of this chapter, you will understand how to analyze an implementation of an algorithm with respect to both time (execution time) and space (memory consumed).
+
+## Big-O Notation Primer:
+The Big-O notation measures the complexity of an algorithm. In Big-O notation, n represents the number of inputs. The question is: “What will happen as n approaches infinity? (❓❓)” Big-O notation tells you how efficient the algorithm is.
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--_8PmhzX0--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://i.pinimg.com/originals/b5/83/3e/b5833ef2e137ed62f022a5de4a1d4ea5.gif)
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--H_DlxmT3--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://danielmiessler.com/images/big-o-chart-tutorial-bazar-aymptotic-notations-1.png)
+
+
+******
+
+# Examples (🤘)
+
+## Linear Time: (🕙)
+```javascript
+// linear time code goes here
+const linear_time=n=>{
+    for(let i=0;i<n;i++){
+        console.log(i)
+    }
+}
+linear_time(10)
+
+```
+### 👉 Output:
+```javascript
+0
+1
+2
+3
+4
+5
+```
+# Quadratic Time: (🕔)
+```javascript
+// quadratic time code goes here
+const quadratic_time=n=>{
+    for(let i=0;i<n;i++){
+        console.log(i)
+        for(let j=i;j<n;j++){
+            console.log(j)
+        }
+    }
+}
+quadratic_time(10)
+
+
+```
+### 👉 Output:
+```javascript
+0
+1
+2
+3
+4
+5
+```
+# Cubic Time: (🕣)
+```javascript
+    
+// cubic time code goes here
+const cubic_time=n=>{
+    for(let i=0;i<n;i++){
+        console.log(i)
+        for(let j=i;j<n;j++){
+            console.log(j)
+            for(let k=j;k<n;k++){
+                console.log(k)
+            }
+        }
+    }
+}
+cubic_time(10) 
+
+
+
+```
+### 👉 Output:
+```javascript
+0
+1
+2
+3
+4
+5
+```
+Finally, an another example logarithmic time complexity is printing elements that are a power of 2 between 2 and n. For example, logarithmic_time(100) will print the following:
+
+```javascript
+    
+const logarithmic_time=n=>{
+    for(let i=2;i<=n;i=i*2){
+        console.log(i)
+    }
+}
+logarithmic_time(100)
+
+
+
+```
+### 👉 Output:
+```javascript
+2
+4
+8
+16
+32
+64
+```
+
+******
+
+# Rules of Big-O Notation:
+Let’s represent an algorithm’s complexity as  $f(n)$ . n represents the number of inputs, $f(n) time$ represents the time needed, and $f(n)$ space represents the space (additional memory) needed for the algorithm. It can be challenging to calculate $f(n)$. But Big-O notation provides some fundamental rules that help developers compute for $f(n)$.
+
+
+* Coefficient rule: If $f(n)$ is $O(g(n))$, then $kf(n)$ is $O(g(n))$, for any constant $k>0$ .
+* Sum rule: If $kf(n)$ is $O(h(n))$ and $g(n)$ is $O(p(n))$, then $f(n)+g(n)$ is $O(h(n)+p(n))$.
+* Product rule: If $f(n)$ is $ O(h(n))$ and $g(n)$ is $O(p(n))$, then $f(n)g(n)$ is $O(h(n)p(n)$.
+* Polynomial rule: If $f(n)$ is a polynomial of degree k, then $f(n)$ is $O(n^k)$
+* Log of a power rule: $log(nk)$ is $O(log(n))$ for any constant k>0 .
+
+## Coefficient Rule: “Get Rid of Constants” (💯)
+This rule simply requires you to ignore any non-input-size constants. Coefficients(or constant) in Big-O are negligible with large input sizes. Therefore, this is the most important rule of Big-O notations.  
+
+If $f(n)$ is $O(g(n))$, then $kf(n)$ is $O(g(n))$, for any constant $ k>0 $.  
+
+This means that both $kf(n)$ and $f(n)$ have the same Big-O notation of $ O(g(n))$ if they are constant. Here is an example of a code block for $f(n)$ :
+```javascript
+ function a(n){
+    var count =0;
+      for (var i=0;i<n;i++){
+        count+=1;
+      }
+   return count;
+ }
+
+
+```
+This block of code has $f(n)=n$. This is because it adds to count $n$ times. Therefore, this function is $O(n)$ . Here's another example code block for for $kf(n)$ :
+```javascript
+ function a(n){
+   var count =0;
+     for (var i=0;i<5*n;i++){
+       count+=1;
+     }
+    return count;
+ }
+
+```
+This block has $kf(n)=5n$ . After all, the first two examples both have a Big-O notation of $ O(n)$ or $O(g(n))$ from the above coefficient rule. Another following code block demonstrates another function with a linear time complexity but with an additional operation which is count+=1:
+```javascript
+  function a(n){
+     var count =0;
+     for (var i=0;i<n;i++){
+      count+=1;
+     }
+     count+=1;
+     return count;
+  }
+```
+This block of code has $f(n)=n+1$ (in linear time, it can also be $n−1$ ). There is +1 from the last operation (count+=1). This still has a Big-O notation of $O(n)$. This is because the one operation is not dependent on the input n like we said earlier.
+******
+# Sum Rule: “Add Big-Os Up” (➕)
+The sum rule is easy to understand; time complexities can be added. Imagine a master(which is function $a(n)$ ) algorithm that involves two other algorithms(which is the for loop). The Big-O notation of that master algorithm is simply the sum of the other two Big-O notations.  
+
+If $f(n)$ is $O(h(n))$ and $g(n)$ is $O(p(n)) $, then $f(n)+g(n) $ is $O(h(n)+p(n))$
+
+Note:It is important to remember to apply the coefficient rule after applying this rule.  
+
+The following code block demonstrates a function with two main loops whose time complexities(quadratic time) must be considered independent:  
+```javascript
+ function a(n){
+    var count =0;
+    for (var i=0;i<n;i++){
+     count+=1;
+    }
+    for (var i=0;i<5*n;i++){
+     count+=1;
+    }
+    return count;
+ }
+```
+In this example, $f(n)=1n$ (or $1n$), and $g(n)=5n$. This results to 6n because $f(n)+g(n)=6n$ (or $h(n)+p(n)$ ). That means, $O(h(n)+p(n))$ is $6n$ or $O(h(n)+p(n))=6n$. However, when applying the coefficient rule, the final result is $O(n)=n$ . This is because both 2 loops or operation abide from this coefficient rule $f(n)$ is $O(g(n))$ , then $kf(n)$ is $O(g(n))$
+*****
+# Product Rule: “Multiply Big-Os” (❌)
+The product rule simply states how Big-Os can be multiplied.  
+
+If $f(n)$ is $O(h(n))$ and $g(n)$ is $O(p(n))$ , then $f(n)g(n)$ is $O(h(n)p(n))$  
+
+The following code block demonstrates a function with two nested for loops(remember that this is a quadratic time inside product rule):  
+
+In this example,$ f(n)=5nxn$ because the second loop has $5nxn$ which runs $5n$ times. Therefore, this results in a total of $5n$ 
+operations. Applying the coefficient rule, the result is that $O(n)=n$. 
+
+# Polynomial Rule: “Big-O to the Power of k” (📈)
+The polynomial rule states that polynomial time complexities have a Big-O notation of the same polynomial degree.(Look at basic Polynomial subject)  
+ 
+If $f(n)$ is a polynomial of degree k , then $f(n)$ is $O(n^k)$  
+The following code block has only one for loop with quadratic time complexity(quadratic time because $n*n$ is equal to 2 loop):
+```javascript
+  function a(n){
+    var count =0;
+    for (var i=0;i<n*n;i++){
+     count+=1;
+    }
+   return count;
+ }
+```
+In this example, $f(n)=n^2 $ because the first loop runs $n*n$ iterations which is equivalent $n^2$ in accord to polynomial rule $f(n)$ is a polynomial of degree $k$, then $f(n)$ is $O(n^k)$ 
+
+# Summary (📚)
+Big-O is important for analyzing and comparing the efficiencies of algorithms. The analysis of Big-O starts by looking at the code, and, applying the rules, applying the rules is because to simplify the Big-O notation linear or quadratic rule is not enough. The following are the most often used rules:
+* Eliminating constant
+* Adding up Big-O Notations
+* Multiplying Big-O Notations
+* Determining the polynomial of the Big-O notation    
+
