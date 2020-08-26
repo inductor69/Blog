@@ -1,0 +1,368 @@
+---
+slug: 'js-guide2'
+title: 'DS In JS [Part-2]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-2].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Introduction (☝️)
+
+This part 2 will briefly discuss some exceptions and cases of JavaScript’s syntax and behavior, so you may see (👀) some changes in JavaScript that may not be familiar to you. (😅)
+
+Also, this part 2 will focus on concepts that are fundamental to JavaScript and will help you to develop a better understanding of the process of designing algorithms in JavaScript. So this part 2 would be easy. (👌)
+---
+
+# JavaScript Scope
+
+The scope is what defines the access of variables. In JavaScript, variables can belong to the global scope or to the local scope. Global scope variables are variables that belong in the global scope and are accessible from anywhere in the program.
+
+## Global Declaration: Global Scope (🌍)
+
+In JavaScript, variables can be declared without using any operators.
+
+Note:(📝) An operator performs some operation. For example 1 + 2, where +(or plus symbol) is an operator and produces a result which is 3 in this case. But here, we don't use an operator:
+
+Here’s an example:
+
+```javascript
+number=3
+number
+```
+### 👉 Output:
+```javascript
+3
+```
+However, since number is a global variable, avoid doing this at all costs because this is one of the worst practices in JavaScript. Hackers may use the global variables for hacking purposes (⚠️). Anyway, always use var or let to declare variables: (😉)
+
+```javascript
+// Without var or let
+number=3
+number
+
+// With var or let
+var number_one=3
+let number_two=3
+number_one
+number_two
+```
+Finally, when declaring variables that won’t be modified, use const: (👍)
+### 👉 Output:
+```javascript
+// With const
+const number=3
+number
+```
+
+# Declaration with var: functional Scope (⭕)
+In JavaScript, var is used to declare variables. These declarations of variables(var and not let and const) “float” all variables way up to the top. This is known as variable hoisting. Variables that are declared at the bottom of the script will not be the last thing executed in a JavaScript program during runtime. In short, it will declare the variable from the top(⬆️). Here is an example:
+
+```javascript
+    
+function scope(){
+   bottom = "No!, I am the real bottom"; // Top
+
+console.log(bottom);
+
+var bottom="I am the real bottom"; // Bottom
+}
+scope(); // it will prints "No!, I am the real bottom" - no erro
+```
+### 👉 Output:
+```java
+Beginnersbook
+Teacher
+Physics
+Teaching
+```
+However, the prototypal inheritance pattern means copying the objects (📝📝) and changing their properties. Here is an example of prototype in JavaScript,
+
+Here's another example but the previous one is the same as writing this one:
+```javascript
+function scope(){
+   var top="I am the real top"; // Top
+   console.log(top);
+   top = "No!, I am the real top"; // Top
+}
+scope(); // it will prints "I am the real top" - no error
+```
+The bottom variable declaration, which was at the last line in the function, is floated or hoisted to the top(⬆️), but not the initialization, and then logging the variable. The var keyword is the scope of the variable is the closest function scope.
+
+Don't try to understand for now, we will explain it further.
+
+In the following code, the scope function is the function scope closest to the print variable. Let's give an example:
+
+```javascript
+function scope_one(print){
+    if(print){
+     var insideIf = 'I help var to access the function scope!';
+    }
+    return insideIf
+}
+scope_one(true); // prints 'I help var to access the function scope!'
+
+```
+To illustrate, the preceding function(which is scope_one) is equivalent to the following code scope_two:
+```javascript
+function scope_two(print){
+    var insideIf;
+    if(print){
+     insideIf = 'I help var to access the function scope!';
+    }
+    return insideIf
+}
+scope_two(true); // prints '12'
+
+```
+In Java, this syntax would have thrown an error (❌❌) because the insideIf variable is generally available only in that if statement block and not outside it.
+
+```javascript
+var a=1
+function scope_three() {
+     if(true) {
+      var a=4
+     }
+   return a
+}
+scope_three()
+
+
+```
+4 was printed, not the global variable with a value 1, because it was redeclared and available only in that function scope. Function scope helped variable to have its scope inside the function once it was declared inside it. Okay! (🙌)
+
+# Declaration with let: Block Scope (⭕)
+
+Another keyword that can be used to declare a variable is let. Any variables declared in this way are in the closest block scope (meaning, they are only available where they are declared). Here's an example:
+```javascript
+function scope_four(){
+if(print){
+ let insideIf = "I don't help let to access the function scope! Depending where they are declared or available";
+}
+return insideIf
+
+}
+scope_four()
+
+// See something? Remember that it might produce an "Error" once you clicked the run button
+
+```
+In this example, nothing is logged to the console(or error) because the insideIf variable is available only inside the if statement block.
+
+# Equality and Types (👩👨)
+JavaScript has different data types than in traditional languages such as Java. Let’s explore how this impacts things such as equality comparison. (😉)
+
+## Variable Types
+In JavaScript, there are seven primitive data types. And here's a list of 7(seven) primitive(primary) data types:
+
+<b>boolean</b> <br/>
+<b>number</b>  <br/>
+<b>string</b>  <br/>
+<b>undefined</b>   <br/>
+<b>object</b>  <br/>
+<b>function</b>    <br/>
+<b>symbol</b> (symbol won’t be discussed)  <br/>
+Undefined is a primitive value that is already available to a variable once it has been declared(except if it has a value):
+
+## Examples:
+```javascript
+    
+var nothing;
+nothing // will print undefined since is already available to a variable once it has been declared(except if it has a value)
+```
+Another one is typeof, typeof is the primitive operator used to return the type of a variable.
+
+## Example:
+
+```javascript
+var is20 = false; // boolean
+console.log(typeof is20); // boolean
+
+var age = 19;
+console.log(typeof age); // number
+
+var lastName = "Bae";
+console.log(typeof lastName); // string
+
+var fruits = ["Apple", "Banana", "Kiwi"];
+console.log(typeof fruits); // object
+
+var me = {firstName:"Sammie", lastName:"Bae"};
+console.log(typeof me); // object
+
+var nullVar = null;
+console.log(typeof nullVar); // object
+
+```
+## Output:
+
+```javascript
+"boolean"
+"number"
+"string"
+"object"
+"function"
+"undefined"
+```
+# Truthy/Falsey Check
+True/false checking is often used in if statements. In many languages, the parameter inside the if() function must be a boolean type(boolean type is true or false value). However, JavaScript is more flexible with this. Here’s an example:
+
+```javascript
+if(node){
+//...
+}
+
+```
+Here, node is a variable. If that variable is empty, null, or undefined, it will be evaluated as false in JavaScript. Here are commonly used expressions that evaluate to false: <br />
+
+false <br />
+0 <br />
+Empty strings ('' and "") <br />
+NaN <br />
+undefined <br />
+null <br />
+Here are commonly used expressions that evaluate to true: <br />
+
+true <br />
+Any number other than 0 <br />
+Non-empty strings <br />
+Non-empty object <br />
+Here's an example: <br />
+
+```javascript
+var print;
+
+if(print) {
+    return true
+} else {
+    return false
+}
+// What do you think this code will going to print, true or false?
+
+```
+
+# (===) VS (==)
+ 
+JavaScript is a scripting language, and the variable types are interpreted as the code runs. Hence, === checks for both the
+type and the value, while == checks only for the value.
+<br/>
+Example:
+
+```javascript
+var x=1,y=1,z="1"
+if(x==y){
+    console.log('In ==, x and y has the same value')
+}
+if(x==z) {
+    console.log('In ==, x and z has the same value')
+}
+
+if(x===y){
+    console.log('In ===, x and y has the same value and type')
+}
+if(x===z) {
+
+} else {
+    console.log('In ===, x and z has the same value but not type')
+}
+```
+
+## Output:
+
+```javascript
+"In ==, x and y has the same value"
+"In ==, x and z has the same value"
+"In ===, x and y has the same value and type"
+"In ===, x and z has the same value but not type"
+```
+
+1 == "1" returns true because the value "1" is forced to a number after(or before) the comparison and interpreted its value. On the other hand, 1 === "1" returns false because the type of "1" is a string, while 1 is a number.
+
+# Objects
+
+Most strongly typed languages such as Java use isEquals() to check whether two objects are the same. You may be tempted to simply use the == operator to check whether two objects are the same too in JavaScript right? However, this will not evaluate to true.
+```javascript
+var a={},b={}
+if(a==b){
+   console.log(true)
+} else {
+   console.log(false)
+}
+
+if(a===b){
+   console.log(true)
+} else {
+   console.log(false)
+}
+
+// Notice something? Is it false? Why?
+
+```
+Although these objects are equivalent (same empty properties and same empty values), they are not equal. Namely, the variables have different addresses in memory to store.
+
+This is why most JavaScript applications use utility libraries such as lodash or underscore, which have the isEqual function to check two objects or values strictly. This occurs by comparing the property or values of an object(not the object itself). In this example, each property is compared:
+
+```javascript
+    
+function isEquivalent(a, b) {
+// arrays of property names
+var aProps = Object.getOwnPropertyNames(a);
+var bProps = Object.getOwnPropertyNames(b);
+
+// Object.getOwnPropertyNames(a) returns all own properties of the object
+
+// If their property lengths are different or not equal, they're different objects
+if (aProps.length != bProps.length) {
+   return false;
+}
+
+for (var i = 0; i < aProps.length; i++) {
+   var propName = aProps[i];
+
+// If the values of the property are different or not equal
+   if (a[propName] !== b[propName]) {
+      return false;
+   }
+}
+
+// If everything matched, correct
+   return true;
+}
+isEquivalent({'hi':12},{'hi':12}); // returns true
+
+```
+
+
+## Output:
+
+```javascript
+true
+```
+However, this would still work for objects that have a string or a number like "1" or 1. But arrays(or {}) and functions(or function()):
+
+```javascript
+var a={'a':{},'b':function(){}}
+var b={'a':{},'b':function(){}}
+
+isEquivalent(a,b) // Will return to false
+```
+This is because functions and arrays cannot simply use the == operator to check for their equality. Here's another example:
+```javascript
+    
+var function1 = function(){console.log(2)};
+var function2 = function(){console.log(2)};
+function1 == function2; // prints 'false'
+
+```
+Although the two functions perform the same operation, the two functions have different addresses in memory to store, and therefore, the equality operator returns false.
+
+The equality check operators, == and ===, can be used only for strings and numbers. To implement an equivalence check for objects, each properties or values in the object needs to be checked.
+
+# Summary (📚)
+var declares the variable within the function scope, let declares the variable in the block scope, and variables can be declared in the global scope; however, global scope should be avoided. For type checking, typeof should be used. Finally, for equality checks, use == to check the value, and use === to check for the type as well as the value. However, use these only on non-object types such as numbers, strings, and booleans
+

@@ -1,0 +1,225 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-3]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-3].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# JavaScript Numbers (☝️)
+
+This part will focus on JavaScript number operations, number representation, Number objects, common number algorithms, and random number generation. By the end of this part, you will understand how to work with numbers in JavaScript as well as how to implement prime factorization, which is fundamental for encryption. (🔐)
+
+Number operations allow you to compute numerical values. Here are the number operators in JavaScript:
+
+```javascript
++ : addition
+- : subtraction
+/ : division
+* : multiplication
+% : modulus
+``` 
+
+---
+
+# Number System
+
+JavaScript uses a 32-bit floating-point representation for numbers. In this example, the value is 0.15625. The sign bit (31) indicates that the number is negative if the sign bit is 1. The next 8 bits indicate the exponent value, which is e. Finally, the remaining 23 bits represent the fraction value known as Mantissa.
+With decimal fractions, this floating-point number system causes some rounding errors in JavaScript. For example, 0.1 and 0.2 cannot be represented precisely. Hence, 0.1 + 0.2 === 0.3 yields false.
+```javascript
+(f=()=>0.1+0.2===0.3?true:false)() // prints 'false'
+
+```
+To really understand why 0.1 cannot be represented properly as a 32-bit floating-point number, you must understand binary (click here to learn more about binary). Representing many decimals in binary requires an infinite number of digits. This because binary numbers are represented by 2n where n is an integer.
+
+While trying to calculate 0.1, long division will go on forever. As shown in below, 1010 represents 10 in binary. Trying to calculate 0.1 (1/10) results in an indefinite number of decimal points.
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--tNmEMX6U--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://aaronbloomfield.github.io/pdr/slides/images/03-numbers/long-division.png)
+
+## JavaScript Number Object (🔢)
+
+## Integer Rounding (1️⃣1️⃣1️⃣1️⃣)
+Since JavaScript uses floating point to represent all numbers, integer division in programming languages like Java simply evaluates division expressions to their quotient.
+
+For example, 5/4 is 1 in Java because the quotient is 1(although there is a remainder):
+```java
+public class Demo {
+   public static void main( String args[] ) {
+      int a = 5;
+      int b = 4;
+      System.out.println("a / b = " + (a / b) );
+   }
+} // 5 / 4 = 1
+```
+While in JS
+```javascript
+(f=()=>5/4)() // 5/4 = 1.25
+```
+This is because Java requires you to explicitly type the integer as an integer. Hence, the result cannot be a floating point. However, if JavaScript developers want to implement integer division, they can do one of the following:
+```javascript
+Math.floor // rounds down to nearest integer
+Math.round // rounds to nearest integer
+Math.ceil // rounds up to nearest integer
+Math.floor(0.9); // 0
+Math.floor(1.1); // 1
+Math.round(0.49); // 0
+Math.round(0.5); // 1
+Math.round(2.9); // 3
+Math.ceil(0.1); // 1 
+Math.ceil(0.9); // 1 
+Math.ceil(21); // 21 
+Math.ceil(21.01); // 22
+```
+## Number.EPSILON (3️⃣3️⃣)
+Number.EPSILON returns the smallest interval between two representable numbers. This is useful for the problem with floating-point approximation.
+```javascript
+(numberEquals=()=>Math.abs(0.1 + 0.2-0.3) < Number.EPSILON)() // prints 'true'
+
+```
+This function works by checking whether the difference between the two numbers are smaller than Number.EPSILON. Remember that Number.EPSILON is the smallest difference between two representable numbers. The difference between 0.1+0.2 and 0.3 will be smaller than Number.EPSILON. See the value of Number.EPSILON:
+```javascript
+(f=()=>Number.EPSILON)() //2.220446049250313e-16
+
+```
+# Maximums (↗️↗️↗️)
+Number.MAX_SAFE_INTEGER returns the largest integer:
+
+```javascript
+(f=()=>Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2)() // prints 'true'
+```
+This returns true because it cannot go any higher. However, it does not work for floating-point decimals:
+```javascript
+(f=()=>Number.MAX_SAFE_INTEGER + 1.111 === Number.MAX_SAFE_INTEGER + 2.022)() // prints 'false'
+```
+Number.MAX_VALUE returns the largest floating-point number possible. Number.MAX_VALUE is equal to 1.7976931348623157e+308:
+```javascript
+    
+(f=()=>Number.MAX_VALUE + 1 === Number.MAX_VALUE + 2)()
+// prints 'true'
+```
+This uses double-precision floating-point representation and works for floating points as well:
+```javascript
+    
+(f=()=>Number.MAX_VALUE + 1.111 === Number.MAX_VALUE + 2.022)()
+// prints 'true'
+```
+## Minimums (👌👌👌)
+Number.MIN_SAFE_INTEGER returns the smallest integer. Number.MIN_SAFE_INTEGER is equal to -9007199254740991:
+```javascript
+(f=()=>Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2)()
+// prints 'true'
+
+```
+This returns true because it cannot get any smaller. However, it does not work for floating-point decimals: (😈)
+```javascript
+(f=()=>Number.MIN_SAFE_INTEGER - 1.111 === Number.MIN_SAFE_INTEGER - 2.022)()
+// prints 'false'
+```
+Number.MIN_VALUE returns the smallest floating-point number possible. Number.MIN_VALUE is equal to <br/>
+$ 5(e)-324 $<br/>
+This is not a negative number since it is the smallest floating-point number possible and means that Number.MIN_VALUE is actually bigger than Number.MIN_SAFE_INTEGER.
+<br/>
+Number.MIN_VALUE is also the closest floating point to zero:
+
+```javascript
+(f=()=>Number.MIN_VALUE - 1 == -1)() // prints 'true'
+
+
+```
+This is because this is similar to writing 0 - 1 == -1.
+## Infinity (🌀🌀🌀🌀)
+The only thing greater than Number.MAX_VALUE is Infinity, and the only thing smaller than Number.MAX_SAFE_INTEGER is -Infinity(negative infinity):
+```javascript
+let i=()=>Infinity > Number.MAX_SAFE_INTEGER // true
+let j=()=>-Infinity < Number.MAX_SAFE_INTEGER // true
+let k=()=>-Infinity-32323323 == -Infinity-1 // true
+i();j();k() //true
+
+```
+This evaluates to true because nothing can go smaller or higher to -Infinity. (😎)
+
+## Size Summary $ (=) $
+This summarizes the size of JavaScript numbers from the smallest left (⬅️) to the largest right (➡️):
+```javascript
+-Infinity < Number.MIN_SAFE_INTEGER < Number.MIN_VALUE < 0 < Number.MAX_SAFE_INTEGER < Number.MAX_VALUE < Infinity
+
+
+```
+```javascript
+(f=()=>-Infinity < Number.MIN_SAFE_INTEGER < Number.MIN_VALUE < 0 < Number.MAX_SAFE_INTEGER < Number.MAX_VALUE < Infinity)()
+// prints 'true'
+
+
+```
+# Number Algorithms: (⤵️↩️⤴️↪️)
+One of the most discussed algorithms involving numbers is for testing whether a number is a prime number or not. Let’s review this now❗
+
+## Primary Test (🔬🔬🔬)
+
+A primary test can be done by iterating from 2 to n, checking whether modulus division (remainder) is equal to zero: 0️⃣
+```javascript
+// List of Prime Number ...
+// 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97
+function isPrime(n){
+ if (n <= 1) {
+   return false;
+ }
+
+// check from 2 to n-1
+ for (var i=2; i<n; i++) {
+      if (n%i == 0) {
+       return false;
+      }
+ }
+
+return true;
+}
+
+isPrime(2) // Change the value
+```
+Time Complexity: $O(n) $
+The time complexity is $O(n)$ because this algorithm checks all numbers from $0$ to $n$ . Always remember this term, as we will use this in more advance part, the search and sorting algorithm. Okay, think about how this method iterates through $2$ to $n$.
+# Prime Factorization: (📐📐📐)
+Another useful algorithm to understand is for determining prime factorization of a number. Prime numbers are the basis of encryption (which we will covered in part 4) and hashing (which we will also covered in part 11), and prime factorization is the process of determining which prime numbers multiply to a given number:
+```javascript
+    
+function primeFactors(n){
+  // Print the number of 2s that divide n
+  while (n % 2 == 0) {
+    console.log(2);
+    n = n / 2;
+  }
+  // n must be odd at this point. So we can skip one element 
+  // (Note i = i + 2)
+  for (var i = 3; i * i <= n; i = i + 2) {
+    // While i divides n, print i and divide n
+    while (n % i == 0) {
+      console.log(i);
+      n = n / i;
+    }
+  }
+  // This condition is to handle the case when n is a prime number
+  // greater than 2
+  if (n > 2) {
+    return n;
+  }
+}
+primeFactors(10); // prints '5' and '2'
+```
+Time Complexity: $O(\sqrt n)$ <br/>
+
+This algorithm works by printing any number that is divisible by i without a remainder. In the case that a prime number is passed into this function, it would be handled by printing whether n is greater than 2. (👈)
+# Summary (📚)
+Recall that all numbers in JavaScript are in 32-bit floating point format. To get the smallest possible floating point, you should use Number.EPILSON. The maximum and minimum numbers of JavaScript can be summarized by the following inequality:
+
+```javascript
+-Infinity < Number.MIN_SAFE_INTEGER < Number.MIN_VALUE < 0
+< Number.MAX_SAFE_INTEGER < Number.MAX_VALUE < Infinity
+```
+Prime number validation and prime factorization are concepts used i n various computer science applications such as encryption, which we will covered in part 4.
