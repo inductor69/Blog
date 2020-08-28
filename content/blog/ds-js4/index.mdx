@@ -1,0 +1,400 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-5]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-5].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# JavaScript Arrays
+
+As a JavaScript developer, you will use the array often; it is the most commonly used data structure. Arrays in JavaScript come with a lot of built-in methods. By the end of this part, you will understand arrays and choose the right method (💪)
+
+---
+
+# Introducing Arrays (📊)
+
+Arrays are one of the most fundamental data structures. If you have ever programmed before, you’ve most likely used an array. (😌)
+```javascript
+var array = [1,2,3,4]
+```
+For any data structure, developers are interested in time and space complexity with the four fundamental operations: access, insertion, deletion, and search.
+
+## Insertion (🐖👈👈)
+
+Insertion means adding a new element. JavaScript array insertion .push( element ) method adds a new element at
+the end of the array:
+
+```javascript
+var array = [1, 2, 3, 4];
+array.push(5) //array = [1,2,3,4,5]
+array.push(7) //array = [1,2,3,4,5,7]
+array.push(2) //array = [1,2,3,4,5,7,2]
+array
+
+```
+The time complexity of this operation is $O(1)$ in theory. Practically, this depends on the JavaScript engine that runs the code of course. (😉)
+Another way to add an element is unshift() method. This
+method will add at the first index in the array:
+
+```javascript
+var array = [1, 2, 3, 4];
+array.unshift(5) //array = [5,1,2,3,4]
+array.unshift(7) //array = [7,5,1,2,3,4]
+array.unshift(2) //array = [2,7,5,1,2,3,4]
+array
+
+```
+
+# Deletion (❌❌❌)
+JavaScript array deletion .pop() method removes the
+last element of the array. This also returns the removed element:
+
+
+```javascript
+
+    var array = [1, 2, 3, 4];
+console.log(array.pop()) //returns 4, array = [1,2,3]
+
+//console.log(array.pop()) //returns 3, array = [1,2] // Uncomment this
+
+array
+
+```
+
+The time complexity of .pop is $O(1)$
+
+Another way to remove an element is .shift() method. This
+method will remove the first element and return it:
+
+```javascript
+var array = [1,2,3,4];
+console.log(array.shift()) //returns 1, array = [2,3,4]
+
+//console.log(array.shift()) //returns 2, array = [3,4] // Uncomment this
+
+array
+
+
+```
+## Access (🔑🔑🔑)
+
+Accessing an array at a specified index only takes $O(1)$ because this process get the value directly from the memory:
+```javascript
+var array = [1,2,3,4];
+console.log(array[0]) //returns 1
+console.log(array[1]) //returns 2
+```
+
+## Iteration (🌀🌀🌀)
+Iteration is the process of accessing each of the items. There are ways to iterate through an array. They all have a time
+complexity of $O(n)$ since the iteration is visiting nn (or the number of elements).
+
+### for (Variables; Condition; Modification) (4️⃣🌀🌀)
+for is the most common method of iteration. It is most often used in this form:
+
+```javascript
+    //var array=[1,2,3,4,5] // Remove the '//' before var array
+for (var i = 0, len = array.length; i < len; i++) {
+    console.log(array[i]);
+}
+```
+
+The previous code simply means initialize the variable i, check whether the condition is false (i < len), and then modify (i++) until the condition is false.
+
+You can implement an infinite loop using a for loop by not setting a condition, as shown here:
+```javascript
+
+    for (; ;) {
+    console.log('I am infinite!')
+}
+
+```
+To print the values, use this:
+```javascript
+    var array = ['You', 'are', 'pig'];
+
+for (var index in array) {
+    console.log(array[index]);
+}
+
+// This prints 'You are pig'
+
+```
+
+## for (of) (🅰️🅱️🅰️)
+
+The variable element is the value of the array, as follows:
+```javascript
+    var array = ['If', 'am', 'bad', 'then', 'I', 'am', 'your', 'dad'];
+
+for (var element of array) {
+    console.log(element);
+}
+
+// This prints ' If am bad then I am your dad' :)
+```
+
+## forEach( ) (🐾🐾🐾)
+
+The difference between forEach and other iteration is that forEach cannot break the iteration or skip elements in the array. forEach is more expressive (😘):
+
+```javascript
+    var array = ['With', 'great', 'power', 'comes', 'with', 'great', 'electricity', 'bill'];
+
+array.forEach((element, index)=>console.log(element))
+
+// Remove the '//'
+//array.forEach((element, index)=>console.log(array[index]))
+
+// This prints 'With great power comes with great electricity bill' 
+```
+
+
+
+## for (in) (1️⃣2️⃣3️⃣4️⃣)
+Another way to iterate is to call the indices(index) one by one. The variable index is the index of the array, as follows:
+
+```javascript
+
+    var array = ['all', 'cows', 'are', 'big'];
+
+for (var index in array) {
+    console.log(index);
+}
+
+// This prints the following: '0,1,2,3'
+```
+
+## for (of) (🅰️🅱️🅰️)
+
+The variable element is the value of the array, as follows:
+
+
+```javascript
+
+    var array = ['If', 'am', 'bad', 'then', 'I', 'am', 'your', 'dad'];
+
+for (var element of array) {
+    console.log(element);
+}
+
+// This prints ' If am bad then I am your dad' :)
+```
+## forEach( ) (🐾🐾🐾)
+
+The difference between forEach and other iteration is that forEach cannot break the iteration or skip elements in the array. forEach is more expressive.
+
+```javascript
+   var array = ['With', 'great', 'power', 'comes', 'with', 'great', 'electricity', 'bill'];
+
+array.forEach((element, index)=>console.log(element))
+
+// Remove the '//'
+//array.forEach((element, index)=>console.log(array[index]))
+
+// This prints 'With great power comes with great electricity bill' 
+```
+# Helper Functions (👬👬👬)
+
+## .slice(begin,end) (🔪✂️📰)
+This helper function returns a portion of an array without modifying the array. .slice() takes two parameters: the beginning index and the ending index of the array:
+
+
+```javascript
+    var array = [1, 2, 3, 4];
+console.log(array.slice(1, 2)) //returns [2], array = [1,2,3,4]
+console.log(array.slice(2, 4)) //returns [3,4], array = [1,2,3,4]
+```
+If only the beginning index is passed, the ending index will assumed to be the maximum index(🔚):
+
+```javascript
+
+    var array = [1, 2, 3, 4];
+console.log(array.slice(1)) //returns [2,3,4], array = [1,2,3,4]
+console.log(array.slice(1,4)) //returns [2,3,4], array = [1,2,3,4]
+```
+If nothing is passed, this function simply returns a copy of the array:
+
+
+```javascript
+    var array = [1, 2, 3, 4]
+console.log(array.slice()) //returns [1,2,3,4], array = [1,2,3,4]
+```
+
+It should be noted that array.slice() === array evaluates to false. This is because the memory address those arrays differently.
+
+slice() is useful for copying an array. Remember that arrays in JavaScript are reference-based(connected), meaning that if you assign a new variable to an array, changes to that variable apply to the original array:
+
+```javascript
+    var array_one = [1, 2, 3, 4],array_two = array_one
+
+// Before:
+// array_one = [1,2,3,4]
+// array_two = [1,2,3,4]
+
+// After:
+array_two[0] = 5;
+
+console.log(array_one) // array_one [5,2,3,4]
+console.log(array_two) // array_two [5,2,3,4]
+
+```
+The changing element changed by accident because it is
+a reference to the original array. To create a new array, you can use Array.from( new array ):
+```javascript
+    var array_one = [1, 2, 3, 4],array_two = Array.from(array_one)
+
+// Before:
+// array_one = [1,2,3,4]
+// array_two = [1,2,3,4]
+
+// After:
+array_two[0] = 5;
+
+console.log(array_one) // array_one [1,2,3,4]
+console.log(array_two) // array_two [5,2,3,4]
+
+```
+Array.from() takes $O(n)$ , where $n$ is the size of the array. This is automatic because copying the array requires copying all $n$ elements of the array.
+
+## .splice(begin,size,element1,element2…) (1️⃣📐📄)
+
+This helper function changes the contents of an array by removing and/or adding new elements. .splice() takes three parameters: the beginning index, size to be removed, and the new elements to add.
+
+New elements are added at the position specified by the first parameter. It also returns the removed elements:
+
+```javascript
+    var array = [1, 2, 3, 4];
+
+// Before: array = [1,2,3,4]
+
+// After: return [], array=[1,2,3,4]
+console.log(array.splice()) 
+
+// Before: array = [1,2,3,4]
+
+// After: return [2,3], array=[1,4]
+console.log(array.splice(1, 2))
+
+```
+Object type can be also added to the array:
+
+
+```javascript
+
+
+    var array = [1, 2, 3, 4];
+console.log(array.splice(1, 2, [5, 6, 7])) //returns [2,3], array = [1,[5,6,7],4]
+
+array = [1, 2, 3, 4];
+console.log(array.splice(1, 2, { 'ss': 1 })) //returns [2,3], array = [1,{'ss':1},4]
+
+```
+.splice() is $O(n)$
+
+Similarly to copying, if the range of .splice( ...range ) method specified is the whole array, then each nn item from that array has to be removed.
+
+## Concat (✂️➕📃)
+
+Concat() adds new elements to the array at the end of the array and returns the results array:
+```javascript
+    var array = [1, 2, 3, 4]
+console.log(array.concat()) //returns [1,2,3,4], array = [1,2,3,4]
+console.log(array.concat([2, 3, 4])) //returns [1,2,3,4,2,3,4], array = [1,2,3,4]
+
+```
+
+## .length Property (📏📏📏)
+
+The .length property returns the size of the array:
+
+
+```javascript
+    var array = [1, 2, 3, 4];
+array.length //prints 4
+```
+But changing this property to a lower size can delete elements from the array:
+
+```javascript
+    
+    var array = [1, 2, 3, 4]
+console.log("Original Array:"+array.length) //prints 4
+
+array.length = 3
+"New Array:"+array.length  // prints '3'
+```
+
+# Spread Operator (🎉🎉🎉)
+
+The spread operator (...) is used to expand arguments(or values):
+
+```javascript
+    var sum=(a, b, c, d)=>a + b + c + d
+var numbers = [1, 2, 3, 4];
+sum(...numbers); // prints '10'
+```
+Both the Math.max and Math.min functions can use the spread operator. To find the maximum in an array, use this:
+
+```javascript
+    var array = [1,2,3,4,5];
+Math.max(...array) // print '5'
+```
+To find the minimum in an array, use this:
+
+
+```javascript
+    var array = [3,2,-123,2132,12];
+Math.min(...array) // print '-123'
+```
+## JavaScript Functional Array Methods (🐾🐾🐾)
+
+JavaScript can be written like a functional programming language. It does not use loops (😐), only function (method) calls (😊).
+
+In this section, only three functional array methods in JavaScript will be explored (😭): map, filter, and reduce.
+
+
+# Map (📜📌🚩)
+
+The map function transform every element in the array
+and returns a new array. For example, you can multiply every element by 10, as shown here:
+
+
+```javascript
+    [1, 2, 3, 4, 5, 6, 7].map(value=>value * 10) 
+// prints '[10, 20, 30, 40, 50, 60, 70]'
+
+```
+## Filter (🚯📵🚳)
+
+The filter function returns only elements that meet condition. For example, this filters elements greater than 100:
+
+```javascript
+    [100, 2003, 10, 203, 333, 12].filter(value=>value > 100)
+// prints '[2003, 203, 333]'
+```
+
+## Reduce (📉📉📉)
+
+The reduce function combines all the elements into one value. For example, this adds all the elements:
+
+```javascript
+    [0, 1, 2, 3, 4].reduce((prevVal, currentVal, index,
+array)=>prevVal + currentVal)
+// prints '10'
+```
+This function also can take its second argument (😱). For example, providing 1 will yield to 11, as shown here:
+
+```javascript
+    [0, 1, 2, 3, 4].reduce((prevVal, currentVal, index,
+array)=>prevVal + currentVal,1)
+// prints '10'
+```
+
+

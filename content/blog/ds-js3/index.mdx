@@ -1,0 +1,234 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-4]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-4].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# JavaScript Strings (☝️)
+
+This part 4 will focus on strings, JavaScript String object, and the String object’s built-in functions. You will learn how to access, compare, decompose, and search strings for commonly used real-life purposes. In addition, the chapter will explore string encoding, decoding, encryption, and decryption. By the end of this part, you will understand how to effectively work with JavaScript strings and have a fundamental understanding of string encoding and encryption. (🔒)
+
+---
+
+# JavaScript String Primitive (🔤)
+
+## String Access (🔓)
+
+For accessing characters, you use .chartAt():
+
+```javascript
+'dog'.charAt(1); // returns "o"
+```
+.charAt( index ) takes an index (which starts at 0) and returns the character at that index location in the string.
+
+For multiple-character access, you can use .substring( startIndex, endIndex ), which will return the characters between indices:
+```javascript
+console.log('YouTube'.substring(1,2)) // returns 'o'
+console.log('YouTube'.substring(3,7)) // returns 'tube'
+```
+If you do not pass a second parameter (startIndex, endIndex), it will return all the character values:
+```javascript
+'YouTube'.substring(0); // returns 'Youtube'
+
+```
+## String Comparison ( $ == $)
+
+## Integer Rounding (1️⃣1️⃣1️⃣1️⃣)
+Programming languages have a function that allows you to compare strings. In JavaScript, this can be done simply by using less-than (<) and greater-than (>) operators:
+
+```javascript
+'a' < 'b' // prints 'true'
+```
+This can be really useful for comparing strings when sorting algorithms, which is covered later in part 10. However, if you are comparing two strings of different lengths, it starts comparing from the start of the string:
+```javascript
+'abc' < 'b' // prints 'true'
+```
+Since add is smaller than b, abc < b evaluates to true:
+
+```javascript
+'add' < 'ab' // prints 'false'
+```
+In this example, a d d and a b are compared. This is the
+same as comparing ad with ab:
+```javascript
+'add'<'ab' == 'ad'<'ab' // prints 'true'
+```
+## String Search (🔍🔍🔍)
+To find a specific string within a string, you can use .indexOf ( searchValue [ , fromIndex ] ) . This takes the string to be searched as well as the starting index for the search. It returns the position of the
+matching string, but if found nothing, then -1 (negative one) is returned:
+```javascript
+// Return positive numbers
+console.log('Red Dragon'.indexOf('Red')) // returns 0
+console.log('Red Dragon'.indexOf('Dragon', 0)) // returns 4
+console.log('Red Dragon'.indexOf('Dragon', 4)) // returns 4
+console.log('Red Dragon'.indexOf("", 9)) // returns 9
+
+// Return negative number
+console.log('Red Dragon'.indexOf('RedScale')) // returns -1
+
+```
+To search string inside a larger string, simply check -1 from .indexOf :
+
+```javascript
+
+let existsInString=(stringValue, search)=> stringValue.indexOf(search) !== -1;
+console.log(existsInString('Let say I am the largest string', 'r')); // prints 'true';
+console.log(existsInString('Let say I am the largest string', 'b')); // prints 'false';
+```
+In the following example, the occurrences of the character a will be counted:
+```javascript
+// This will count how many 'a' inside the string
+((str="He's my king from this day until his last day")=>Array.from(str).map((v,i)=>v=='a'?str.indexOf('a')!==-1?0+1:0:0).filter((v=>v)).length)()
+```
+Finally, startsWith returns true (boolean) if the string starts with the input, and endsWith checks whether the string ends with the input:
+```javascript
+    
+console.log('Red Dragon'.startsWith('Red')) // returns true
+console.log('Red Dragon'.endsWith('Dragon')) // returns true
+console.log('Red Dragon'.startsWith('Dragon')) // returns false
+console.log('Red Dragon'.endsWith('Red')) // returns false
+```
+
+# String Decomposition (💩💩💩)
+
+For decomposing a string into parts, you can use .split( separator ) . It creates an array of substrings:
+```javascript
+'chicken,noodle,soup,broth'.split(","); // ["chicken", "noodle", "soup", "broth"]
+```
+Passing an empty separator will create an array of:
+
+```javascript
+'chicken'.split(""); // // ["c", "h", "i", "c", "k", "e", "n"]
+
+```
+The string can be turned into an array to easily iterate through them:
+
+```javascript
+'chicken'.split("").forEach(v=>console.log(v))
+```
+## String Replace (✂️✂️✂️)
+
+.replace( string , replaceString ) replaces a string with another string:
+
+```javascript
+"Wizard of Oz".replace("Wizard","Witch"); // "Witch of Oz"
+```
+# Regular Expressions (😛😲😱😆)
+
+Regular expressions (or regexes) define a search pattern. JavaScript comes with object RegExp, which is used for regular expressions.
+
+The constructor for RegExp object takes two parameters: the regular expression and the optional match settings, as shown here:
+
+```javascript
+i. Perform case-insensitive matching
+g. Perform a global match (find all matches rather than stopping after
+first match)
+m. Perform multiline matching
+```
+<b>RegExp</b> has two functions:
+* <b>search() </b>: returns the index of the match.
+* <b>match()  </b>:  returns all the matches.
+* <b>exec()   </b>: returns the first match.
+* <b>test()   </b>: returns true or false.
+<br/>
+
+## Basic Regex (👌👌👌)
+* <b>^: </b> Indicates the start of a string
+* <b>\d: </b>   Finds any digit
+* <b>[abc]:</b> Finds any character between the brackets
+* <b>[^abc]:</b> Finds any character not between the brackets
+* <b>[0-9]:</b> Finds any digit between the brackets
+* <b>[^0-9]: </b> Finds any digit not between the brackets
+* <b>(x|y):</b> Finds any of the alternatives
+
+The following returns index 11, which is the index of the character D, which is the first character of the matched regex:
+
+```javascript
+"JavaScript DataStructures".search(/DataStructures/) // prints '11'
+```
+## Commonly Used Regexes (🆗🆗🆗)
+
+Regexes are helpful for checking the validity of user input in JavaScript. One common type of input check is to validate whether it has any numeric characters. The following are five regexes that developers often use:
+
+```javascript
+// Number
+console.log(/\d+/.test("123")) // true
+// Number and Letter
+console.log(/\d+/.test("33asd")) // true
+console.log(/\d+/.test("5asdasd")) // true
+// Only letter
+console.log(/\d+/.test("asdasd")) // false
+```
+## Only Numeric Characters: /\d+$/ (1️⃣2️⃣3️⃣4️⃣)
+
+```javascript
+// Only Numeric
+console.log(/^\d+$/.test("123")) // true
+// Numeric and Letter
+console.log(/^\d+$/.test("123a")) // false
+// Only Letter
+console.log(/^\d+$/.test("a")) // false
+```
+## Floating Numeric Characters: /^[0-9].[0-9][1-9]+$/ (1️⃣2️⃣ . 3️⃣4️⃣)
+
+```javascript
+// Only Numeric
+console.log(/^\d+$/.test("123")) // true
+// Numeric and Letter
+console.log(/^\d+$/.test("123a")) // false
+// Only Letter
+console.log(/^\d+$/.test("a")) // false
+```
+
+## Floating Numeric Characters: /^[0-9].[0-9][1-9]+$/ (1️⃣2️⃣ . 3️⃣4️⃣)
+
+```javascript
+var regex=/^[0-9].[0-9][1-9]+$/;
+// No Floating point
+console.log(regex.test("12")) // false
+// With Floating point
+console.log(regex.test("12.2")) // true
+```
+## Only Alphanumeric Characters: /[a-zA-Z0-9] / (🔤🔤🔤)
+
+```javascript
+    
+var regex = /[a-zA-Z0-9]/;
+// With Alphanumeric
+console.log(regex.test("somethingELSE")); // true
+console.log(regex.test("hello")); // true
+console.log(regex.test("112a")); // true
+console.log(regex.test("112")); // true
+// Without Alphanumeric
+console.log(regex.test("^")); // false
+```
+# Query String: /([^?=&]+)(=([^&]*))/ (🔎🔎🔎)
+
+In web applications, web URLs pass parameters for routing or database query. For example, for the URL: http://your.domain/product.aspx?category=4& product_id=2140&query=lcd+tv, the URL might respond to a back-end SQL query like
+the following:
+```javascript
+SELECT LCD, TV FROM database WHERE Category = 4 AND Product_id=2140
+
+```
+To parse these parameters, regexes can be useful:
+```javascript
+    
+ var queryString = {};
+ 'http://your.domain/product.aspx?category=4&product_id=2140&query=lcd+tv'.replace(
+ new RegExp ("([^?=&]+)(=([^&]*))?" , "g" ),
+ function ($0, $1, $2, $3) { queryString[$1] = $3; }
+ );
+ console.log('ID: ' + queryString['product_id' ]); // ID: 2140
+ console.log('Name: ' + queryString['product_name' ]); // Name: undefined
+ console.log('Category: ' + queryString['category' ]); // Category: 4
+
+```
+
