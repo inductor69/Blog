@@ -1,0 +1,887 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-12]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-12].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Linked Lists (😱 🔥 ➡️)
+
+A linked list is a data structure in which each node (or element) points to another node. Unlike arrays, which have a fixed size, a linked list is a dynamic data structure. By the end of this part 13, you will understand how to implement and work with linked lists. And oh! (😮) There are two types of linked lists: singly (➡️) and doubly (↔️). Let’s examine the singly linked list first.(😃) Let's go! (🔥🔥🔥)
+---
+
+## Singly Linked Lists (➡️➡️)
+
+The Singly Linked List is data structure where each node has reference to the next node. Let's look to our sample below:
+
+A node in a singly linked list has the following properties: data and next. data is the value and next is a pointer to another. Let's look to our code below to start to write our Singly Linked Lists:
+
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+```
+
+The following code below is the base for the singly linked list. That is, the code block that check whether the singly linked list is empty:
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+
+
+// Singly Linked List
+function SinglyLinkedList() {
+    this.head = null;
+    this.size = 0;
+}
+
+// Base
+SinglyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+```
+
+## Insertion (➡️✅➡️)
+
+The following code block below shows how to insert into a singly linked list. If the head is empty, the head is set to the new node (or must be added an element). Or if the head is not empty, the old heap (collection or quantity) is saved in temp, and the new head becomes the newly added node. Finally, the new head’s next points to the temp (the old temp).
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+
+
+// Singly Linked List
+function SinglyLinkedList() {
+    this.head = null;
+    this.size = 0;
+}
+
+// Base: Empty
+SinglyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+
+// Insert
+SinglyLinkedList.prototype.insert = function (value) {
+    if (this.head === null) {
+        this.head = new SinglyLinkedListNode(value);
+    } else {
+        var temp = this.head;
+        this.head = new SinglyLinkedListNode(value);
+        this.head.next = temp;
+    }
+    this.size++;
+}
+
+// Log
+SinglyLinkedList.prototype.log = function () {
+    var head = this.head.data;
+    var next1 = this.head.next.data;
+    var next2 = this.head.next.next.data;
+    var next3 = this.head.next.next.next;
+    return {
+        Tree: this.head,
+        Result: head + " -> " + next1 + " -> " + next2 + " -> " + next3
+    };
+}
+
+// Instance(example) of the SinglyLinkedList class
+var sll = new SinglyLinkedList();
+
+// Add
+sll.insert(1); // 1 -> null
+sll.insert(2); // 2 -> 1 -> null
+sll.insert(3); // 3 -> 2 -> 1 -> null
+
+// Result
+sll.log(); // Prints "3 -> 2 -> 1 -> null"
+```
+Time Complexity: $ O(1) $
+
+
+## Deletion By Value (➡️➡️❌)
+
+The deletion of node in a singly linked list is by removing the reference(the link or the path) of that node. If the node is at the end of the linked list, then the second-to-last element can dereference the node by setting its next to null. Let's look at some example code below:
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+
+
+// Singly Linked List
+function SinglyLinkedList() {
+    this.head = null;
+    this.size = 0;
+}
+
+// Base: Empty
+SinglyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+
+// Insert
+SinglyLinkedList.prototype.insert = function (value) {
+    if (this.head === null) {
+        this.head = new SinglyLinkedListNode(value);
+    } else {
+        var temp = this.head;
+        this.head = new SinglyLinkedListNode(value);
+        this.head.next = temp;
+    }
+    this.size++;
+}
+
+// Remove
+SinglyLinkedList.prototype.remove = function (value) {
+    var currentHead = this.head; // this.head is equal to 3 -> 2 -> 1 -> null
+    // currentHead.data is equal to "3"
+    if (currentHead.data == value) {
+        // x = means deleted reference as an example
+        // Remove the reference: 3 x 2 -> 1 -> null
+        this.head = currentHead.next;
+        // Reduce the size by "one"
+        this.size--;
+    } else {
+        var prev = currentHead;  // prev is equal to 3 -> 2 -> 1 -> null
+        // currentHead.next is equal to 2 -> 1 -> null
+        while (currentHead.next) {
+            // currentHead.data is equal to "3"            
+            if (currentHead.data == value) {
+                // prev.next is equal to 2 -> 1 -> null
+                // currentHead.next is equal to 2 -> 1 -> null
+                prev.next = currentHead.next;
+                // prev is equal to 3 -> 2 -> 1 -> null
+                prev = currentHead;
+                // x = means deleted reference as an example
+                // Remove the reference: 3 x 2 -> 1 -> null
+                currentHead = currentHead.next;
+                // currentHead is now equal to 2 -> 1 -> null
+                break; // break out of the loop
+            }
+
+            // prev is now equal to 2 -> 1 -> null since currentHead is equal to 2 -> 1 -> null
+            // if "currentHead.data == value" matched, but if not,
+            // they ignore it and return to the original: "3 -> 2 -> 1 -> null"
+            prev = currentHead;
+            // "currentHead = currentHead.next" means move to the next
+            // if the first value doesn't match linked list value
+            // And then, the while loop starts again...
+            currentHead = currentHead.next;
+        }
+
+        // If wasn't found in the head or middle, it must be on tail
+        if (currentHead.data == value) {
+            prev.next = null;
+        }
+        this.size--;
+    }
+}
+
+// Log 1: Not Deleted Singly Linked List
+SinglyLinkedList.prototype.log1 = function () {
+    var head = this.head.data;
+    var next1 = this.head.next.data;
+    var next2 = this.head.next.next.data;
+    var next3 = this.head.next.next.next;
+    return {
+        Tree: this.head,
+        Result: head + " -> " + next1 + " -> " + next2 + " -> " + next3
+    };
+}
+
+// Log 2: Deleted Singly Linked List
+SinglyLinkedList.prototype.log2 = function () {
+    var head = this.head.data;
+    var next1 = this.head.next
+
+    return {
+        Tree: this.head,
+        Result: head + " -> " + next1
+    };;
+}
+
+// Instance(example) of the SinglyLinkedList class
+var sll = new SinglyLinkedList();
+
+// Add
+sll.insert(1); // 1 -> null
+sll.insert(2); // 2 -> 1 -> null
+sll.insert(3); // 3 -> 2 -> 1 -> null
+
+
+// Result
+console.log(sll.log1()); // Prints " 3 -> 2 -> 1 -> null"
+
+// Remove
+sll.remove(3); // 2 -> 1 -> null
+sll.remove(2); // 1 -> null
+
+// Result
+sll.log2(); // Prints "1 -> null"
+```
+Time Complexity: $O(n)$
+
+## Deletion at the Head (❌➡️➡️)
+
+Deleting an element at the head of the linked list is possible in $O(1)$ . No traversal is required. The implementation of this deletion is shown in the following code block below. This allows the linked list to implement a stack (remember the stack in Part 12). The last-added item can be removed in $O(1)$ . Let's look at some example code below:
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+
+
+// Singly Linked List
+function SinglyLinkedList() {
+    this.head = null;
+    this.size = 0;
+}
+
+// Base: Empty
+SinglyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+
+// Insert
+SinglyLinkedList.prototype.insert = function (value) {
+    if (this.head === null) {
+        this.head = new SinglyLinkedListNode(value);
+    } else {
+        var temp = this.head;
+        this.head = new SinglyLinkedListNode(value);
+        this.head.next = temp;
+    }
+    this.size++;
+}
+
+// Delete
+SinglyLinkedList.prototype.deleteAtHead = function () {
+    var toReturn = null;
+
+    if (this.head !== null) {
+        toReturn = this.head.data;
+        this.data = this.head.next;
+        this.size--;
+    }
+    return toReturn;
+}
+
+// Log 1: Not Deleted Singly Linked List
+SinglyLinkedList.prototype.log1 = function () {
+    var head = this.head.data;
+    var next1 = this.head.next.data;
+    var next2 = this.head.next.next.data;
+    var next3 = this.head.next.next.next;
+    return {
+        Tree: this.head,
+        Result: head + " -> " + next1 + " -> " + next2 + " -> " + next3
+    };
+}
+
+// Log 2: Deleted Singly Linked List
+SinglyLinkedList.prototype.log2 = function () {
+    var next1 = this.head.next.data;
+    var next2 = this.head.next.next.data;
+    var next3 = this.head.next.next.next;
+
+    return {
+        Tree: this.head,
+        Result: next1 + " -> " + next2 + " -> " + next3
+    };;
+}
+
+// Instance(example) of the SinglyLinkedList class
+var sll = new SinglyLinkedList();
+
+// Add
+sll.insert(1); // 1 -> null
+sll.insert(2); // 2 -> 1 -> null
+sll.insert(3); // 3 -> 2 -> 1 -> null
+
+
+// Result
+console.log(sll.log1()); // Prints " 3 -> 2 -> 1 -> null"
+
+// Remove
+sll.deleteAtHead(); // 2 -> 1 -> null
+
+// Result
+sll.log2(); // Prints "1 -> null"
+```
+
+## Search (➡️➡️🔎)
+
+To find out whether a value exists in a singly linked list, simple iteration through all its next pointers is needed. Let's look at some example code below:
+
+```javascript
+// Singly Linked List Node
+function SinglyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+}
+
+// Singly Linked List
+function SinglyLinkedList() {
+    this.head = null;
+    this.size = 0;
+}
+
+// Base: Empty
+SinglyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+
+// Insert
+SinglyLinkedList.prototype.insert = function (value) {
+    if (this.head === null) {
+        this.head = new SinglyLinkedListNode(value);
+    } else {
+        var temp = this.head;
+        this.head = new SinglyLinkedListNode(value);
+        this.head.next = temp;
+    }
+    this.size++;
+}
+
+// Search
+SinglyLinkedList.prototype.find = function (value) {
+    var currentHead = this.head;
+
+    while (currentHead.next) {
+        if (currentHead.data == value) {
+            return true;
+        }
+        currentHead = currentHead.next;
+    }
+    return false;
+}
+
+// Instance(example) of the SinglyLinkedList class
+var sll = new SinglyLinkedList();
+
+// Add
+sll.insert(1); // 1 -> null
+sll.insert(2); // 2 -> 1 -> null
+sll.insert(3); // 3 -> 2 -> 1 -> null
+
+// Search
+sll.find(3); // Prints "true"
+```
+Time Complexity: $O(n)$
+
+## Doubly Linked Lists (↔️↔️)
+
+A doubly linked list can be thought of as a bidirectional(two-way) singly linked list. Each node in the doubly linked list has both a next pointer and a prev pointer. The following code block below implements the doubly linked list node:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+```
+
+```javascript
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+// Empty
+DoublyLinkedList.prototype.isEmpty = function () {
+    return this.size == 0;
+}
+```
+
+Each node in a doubly linked list has next and prev properties.
+
+## Insertion at the Head (✅↔️↔️)
+
+Inserting into the head of the doubly linked list is the same as the insertion for the singly linked list except that it has to update the prev pointer as well. The following code block below shows how to insert into the doubly linked list. If the head of the linked list is empty, the head and the tail are set to the new node.
+
+This is because when there is only one element, that element is both the head and the tail. Otherwise, the temp variable is used to store the new node. The new node’s next points to the current head, and then the current head’s prev points to the new node. Finally, the head is updated to the new node. Let's look at it below:
+
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtFront = function (value) {
+    // At first, the head is null
+    if (this.head === null) {
+        // So this is the first code block to be executed
+        // "this.head = new DoublyLinkedListNode(value);" means
+        //  Add "1" to data at current head
+        this.head = new DoublyLinkedListNode(value);
+        // "this.tail = this.head;" means
+        // Add "1" to data at current tail
+        this.tail = this.head;
+        // This means both head and tail have the
+        // same value of "1" at first.
+        // After "1", it will go to "else statement"
+        // Because "this.head" is now not null
+    } else {
+        // This is the code block to be executed next after "1"
+        // if "this.head" is not null
+        // "temp = new DoublyLinkedListNode(value);" means add new node to "this.data"
+        // And that is "2". Because that's next
+        var temp = new DoublyLinkedListNode(value);
+        // "temp.next = this.head;" means add the current head
+        // which is "1" and make
+        // the last head we did earlier to become the tail
+        // And now our head is "2" and the tail is "1"
+        // But the "temp.next" said "make 1 as the head"
+        // Because that's the last node we add in "temp.next"
+        temp.next = this.head; // Working for "tail"
+        // "this.head.prev = temp;" means just add the new head
+        // "this.head.prev = temp;" means "add 3 after 2"
+        // Because the earlier head was "2"
+        // And now, our current head is "3"
+        this.head.prev = temp; // Working for "head"
+        // "this.head = temp;" means "add 2 after 1" and "add 3 after 2"
+        // And now, our head is "3" and our tail is "1"
+        // "this.head = temp;" makes the navigation
+        // to next and prev pointer easier
+        this.head = temp;
+        // "add 3 after 2" and "add 2 after 1" equate to:
+        // "3 <-> 2" as our head to middle and "2 <-> 1" as middle to tail
+        // And now we have head and tail
+    }
+    this.size++;
+}
+
+// Log
+DoublyLinkedList.prototype.log = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+    // You can try "this.head" and "this.tail" to see
+    // the tree structure and study them
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtFront(1);
+dll.addAtFront(2);
+dll.addAtFront(3);
+
+// Result
+dll.log() // Prints "{ head: 3, tail: 1 }"
+```
+Time Complexity: $O(1)$
+
+## Insertion at the Tail (↔️↔️✅)
+
+Similarly, a new node can be added to the tail of a doubly linked list, as implemented in the following code block:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtTail = function (value) {
+    // At first, the tail is null
+    if (this.tail === null) {
+        // So this is the first code block to be executed
+        // "this.tail = new DoublyLinkedListNode(value);" means
+        //  Add "1" to data at current tail
+        this.tail = new DoublyLinkedListNode(value);
+        // "this.head = this.tail;" means
+        // Add "1" to data at current head
+        this.head = this.tail;
+        // This means both head and tail have the
+        // same value of "1" at first.
+        // After "1", it will go to "else statement"
+        // Because "this.tail" is now not null
+    } else {
+        // This is the code block to be executed next after "1"
+        // if "this.tail" is not null
+        // "temp = new DoublyLinkedListNode(value);" means add new node to "this.data"
+        // And that is "2". Because that's next
+        var temp = new DoublyLinkedListNode(value);
+        // "temp.prev = this.tail;" means add the current tail
+        // which is "1" and make
+        // the last tail we did earlier to become the head
+        // And now our head is "2" and the tail is "1"
+        // But the "temp.prev" said "make 2 as the tail"
+        // Because that's the last node we add in "temp.prev"
+        temp.prev = this.tail; // Working for "head"
+        // "this.tail.next = temp;" means just add the new tail
+        // "this.tail.next = temp;" means "add 3 after 2"
+        // Because the earlier tail  was "2"
+        // And now, our current tail is "3"
+        this.tail.next = temp; // Working for "tail"
+        // "this.tail = temp;" means "add 2 after 1" and "add 3 after 2"
+        // And now, our tail is "3" and our head is "1"
+        // "this.head = temp;" makes the navigation
+        // to next and prev pointer easier
+        this.tail = temp;
+        // "add 2 after 1" and "add 3 after 2" equate to:
+        // "1 <-> 2" as our head to middle and "2 <-> 3" as middle to tail
+        // And now we have head and tail
+        // In insertion to the head, we just reverse this code
+        // a little bit. So there's just slight change in this code
+    }
+    this.size++;
+}
+
+// Log
+DoublyLinkedList.prototype.log = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+    // You can try "this.head" and "this.tail" to see
+    // the tree structure and study them
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtTail(1);
+dll.addAtTail(2);
+dll.addAtTail(3);
+
+// Result
+dll.log() // Prints "{ head: 1, tail: 3 }"
+```
+Time Complexity: $O(1)$
+
+
+## Deletion at the Head (❌↔️↔️)
+
+Removing a node at the head from a doubly linked list can be done in O(1)O(1) time. If there is only one item, both the head and the tail are set to null. Otherwise, the head is set to the head’s next pointer. Finally, the new head’s prev is set to null to remove the reference of the old head. This is implemented in the following code block. This is great because it can be used like a dequeue function from the queue data structure. Let's look at some example code below:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtFront = function (value) {
+    if (this.head === null) {
+        this.head = new DoublyLinkedListNode(value);
+        this.tail = this.head;
+    } else {
+        var temp = new DoublyLinkedListNode(value);
+        temp.next = this.head;
+        this.head.prev = temp;
+        this.head = temp;
+    }
+    this.size++;
+}
+
+// Delete
+DoublyLinkedList.prototype.deleteAtHead = function () {
+    var toReturn = null;
+
+    if (this.head !== null) {
+        toReturn = this.head.data;
+        if (this.tail === this.head) {
+            this.head = this.tail = null;
+        } else {
+            this.head = this.head.next;
+            this.head.prev = null;
+        }
+    }
+    this.size--;
+    return toReturn;
+}
+
+// Log 1
+DoublyLinkedList.prototype.log1 = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+}
+
+// Log 2
+DoublyLinkedList.prototype.log2 = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtFront(1);
+dll.addAtFront(2);
+dll.addAtFront(3);
+
+// Result
+console.log(dll.log1()) // Prints "{ head: 3, tail: 1 }"
+
+// Delete
+dll.deleteAtHead();
+
+// Result
+console.log(dll.log2()) // Prints "{ head: 2, tail: 1 }"
+```
+Time Complexity: $O(1)$
+
+## Deletion at the Tail (↔️↔️❌)
+
+The tail node can be removed in $O(1)$ time. By having the ability to remove at , the doubly linked list can also be thought of as a bidirectional(two-way) queue data structure. A queue can dequeue the first-added item, but a doubly linked list can dequeue the tail the item at the tail or the item at the head in $O(1)$ time. Let's look at some example code below:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtTail = function (value) {
+    if (this.tail === null) {
+        this.tail = new DoublyLinkedListNode(value);
+        this.head = this.tail;
+    } else {
+        var temp = new DoublyLinkedListNode(value);
+        temp.prev = this.tail;
+        this.tail.next = temp;
+        this.tail = temp;
+    }
+    this.size++;
+}
+
+// Delete
+DoublyLinkedList.prototype.deleteAtTail = function () {
+    var toReturn = null;
+
+    if (this.tail !== null) {
+        toReturn = this.tail.data;
+
+        if (this.tail == this.head) {
+            this.head = this.tail = null;
+        } else {
+            this.tail = this.tail.prev;
+            this.tail.next = null;
+        }
+        this.size--;
+        return toReturn;
+    }
+}
+
+// Log 1
+DoublyLinkedList.prototype.log1 = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+}
+
+// Log 2
+DoublyLinkedList.prototype.log2 = function () {
+    return {
+        head: this.head.data,
+        tail: this.tail.data
+    };
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtTail(1);
+dll.addAtTail(2);
+dll.addAtTail(3);
+
+// Result
+console.log(dll.log1()) // Prints "{ head: 1, tail: 3 }"
+
+// Delete
+dll.deleteAtTail();
+
+//  Result
+dll.log2() // Prints "{ head: 1, tail: 2 }"
+```
+Time Complexity: $O(1)$
+
+## Search (🔎📦🔍)
+
+To find out whether a value exists in a doubly linked list, you can start at the head and use the next pointer. The following code
+block is the same implementation as the singly linked list search implementation, which starts at the head and looks for the item:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtFront = function (value) {
+    if (this.head === null) {
+        this.head = new DoublyLinkedListNode(value);
+        this.tail = this.head;
+    } else {
+        var temp = new DoublyLinkedListNode(value);
+        temp.next = this.head;
+        this.head.prev = temp;
+        this.head = temp;
+    }
+    this.size++;
+}
+
+// Search
+DoublyLinkedList.prototype.findStartingHead = function (value) {
+    var currentHead = this.head;
+    while (currentHead.next) {
+        if (currentHead.data == value) {
+            return true;
+        }
+        currentHead = currentHead.next;
+    }
+    return false;
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtFront(3);
+dll.addAtFront(2);
+dll.addAtFront(1);
+
+// Search
+dll.findStartingHead(1) // Prints "true"
+```
+Time Complexity: $O(n)$
+
+The following code traverses the doubly linked list starting with the tail using prev pointers:
+
+```javascript
+// Doubly Linked List Node
+function DoublyLinkedListNode(data) {
+    this.data = data;
+    this.next = null;
+    this.prev = null;
+}
+
+// Doubly Linked List
+function DoublyLinkedList() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+}
+
+//  Add
+DoublyLinkedList.prototype.addAtTail = function (value) {
+    if (this.tail === null) {
+        this.tail = new DoublyLinkedListNode(value);
+        this.head = this.tail;
+    } else {
+        var temp = new DoublyLinkedListNode(value);
+        temp.prev = this.tail;
+        this.tail.next = temp;
+        this.tail = temp;
+    }
+    this.size++;
+}
+
+// Search
+DoublyLinkedList.prototype.findStartingTail = function (value) {
+    var currentTail = this.tail;
+    while (currentTail.prev) {
+        if (currentTail.data == value) {
+            return true;
+        }
+        currentTail = currentTail.prev;
+    }
+    return false;
+}
+
+// Instance(example) of the Doubly Linked List class
+var dll = new DoublyLinkedList();
+
+// Add
+dll.addAtTail(1);
+dll.addAtTail(2);
+dll.addAtTail(3);
+
+// Search
+dll.findStartingTail(3) // Prints "true"
+```
+
+Time Complexity: $O(n)$

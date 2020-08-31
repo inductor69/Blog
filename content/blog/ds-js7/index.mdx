@@ -1,0 +1,234 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-8]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-8].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Recursion (😱 🔥 🌀)
+
+This part 8 introduces the concept of recursion and recursive algorithms(Remember they are different, we will discuss them later(😉)). We will also discuss the definition of recursion and fundamental rules for recursive algorithms. In addition, methods of analyzing efficiencies of recursive functions will be covered using mathematical notations. Finally, part 8 exercises will help solidify this information and your understanding so make sure you really read all section of this article. (😀)
+
+---
+
+## Rules of Recursion (📜🌀)
+
+When recursive functions are implemented incorrectly, it causes the programs stuck and not terminate. Infinite recursive result in stack overflow (😐). Stack overflow is when the maximum number of call exceeds the limited amount of space(memory).
+<br/>
+To implement correctly, they must follow certain rules
+so that stack overflow is avoided. These rules are covered next:
+
+* Base Case
+* Divide-and-Conquer Method
+* Classic Fibonacci Sequence
+* Fibonacci Sequence: Tail Recursion 
+* Pascal's Triangle
+
+
+### Base Case (0️⃣◀️1️⃣)
+
+
+In recursion, there must be a base case (also referred to as terminating case). Because recursive methods call themselves, they will never stop unless this base case is reached.
+
+Stack overflow from recursion is most likely the result of not having a proper base case. In the base case, there are no recursive function calls.
+
+Let’s examine the following function, which prints numbers counting down from $n$ to $0$ as an example:
+
+```javascript
+// Learn Data Structures and Algorithms in JavaScript | Part 08
+function countDownToZero(n) {
+    // base case. Stop at 0
+    if (n < 0) {
+        return; // stop the function
+    } else {
+        console.log(n);
+        countDownToZero(n - 1); // count down 1
+    }
+}
+countDownToZero(5);
+```
+
+The base case for this function is when nn is smaller to $0$ (or equal). This is because the desired outcome was to stop counting at 00 . If a negative number is given as input, it will not print that number because of the base case.
+
+### Divide-and-Conquer Method
+
+
+In computer science, the divide-and-conquer method is when a problem is solved by solving all of its smaller components. With the countdown example, counting down from $2$ can be solved by printing 2 and then counting down again from $1$ . It is necessary to make the problem smaller to reach the base case. Otherwise, if the recursive call does not converge(or meet) to a base case, a stack overflow occurs. oh-uh(😮)
+
+### Classic Example: Fibonacci Sequence (➿➿➿)
+
+The Fibonacci sequence is a list of infinite numbers, each of which is the sum of the past two terms (starting with 1): <br/>
+
+$1$,$1$,$2$,$3$,$5$,$8$,$13$,$21$…
+
+So, how do you print the Fibonacci sequence? (❓) Let's see in the next section. (😉)
+
+### Iterative Solution: Fibonacci Sequence (📦➡️🐖➡️)
+An iterative solution using a for loop may look something like this:
+
+
+
+```javascript
+function getNthFibo(n) {
+    if (n <= 1) return n;
+    var sum = 0,
+        last = 1,
+        lastlast = 0;
+
+    for (var i = 1; i < n; i++) {
+        sum = lastlast + last;
+        lastlast = last;
+        last = sum;
+    }
+    return sum;
+}
+```
+A for loop can be used to keep track of the last two elements(last and lastlast) and its sum yields the Fibonacci number. Now, how might this be done recursively? (❓) Let's see in the next section. (😉)
+
+### Recursive Solution: Fibonacci (🌀🌀🌀🌀)
+
+The following shows the recursive solution:
+
+```javascript
+function getNthFibo(n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return getNthFibo(n - 1) + getNthFibo(n - 2);
+    }
+}
+
+```
+Base case : 
+The base case for the Fibonacci sequence is $1$. 
+
+Divide and conquer : By definition, the Nth Fibonacci
+number is the sum of the $(n-1)th$ and $(n-2)th$ . However, this
+implementation has a time complexity of $2^n$ 
+
+## Fibonacci Sequence: Tail Recursion (🔢➡️1️⃣)
+
+
+A tail recursive function is a recursive function in which the recursive call is the last executed thing in the function. First let’s look at the iterative solution:
+
+
+```javascript
+function getNthFibo(n) {
+    if (n <= 1) return n;
+    var sum = 0,
+        last = 1,
+        lastlast = 0;
+
+    for (var i = 1; i < n; i++) {
+        sum = lastlast + last;
+        lastlast = last;
+        last = sum;
+    }
+    return sum;
+}
+```
+At each iteration, the following update happens:
+
+$ (last,last)=(last,last+last) $
+
+### With this structure, the following recursive function can be formed:
+
+With this structure, the following recursive function can be formed:
+
+
+```javascript
+function getNthFiboBetter(n, lastlast, last) {
+    if (n == 0) {
+        return lastlast;
+    }
+    if (n == 1) {
+        return last;
+    }
+    return getNthFiboBetter(n - 1, last, lastlast + last);
+}
+
+```
+Time Complexity: $ O(n)$
+
+This function executes n times because it’s decremented by n-1 each time with only single recursive call.
+
+Space Complexity: $O(n)$
+
+The space complexity is also $O(n)$ because of the stack call used for this function. This will be further explained in the Recursive Call Stack Memory later in the next section.
+
+## Big-O for Recursion (🌀🎯) 
+
+Recursive algorithms are much harder to analyze. To perform Big-O analysis for recursive algorithms, its recurrence relations must be analyzed. Let's go!
+
+### Recurrence Relations (🌀↔️🌀)
+
+Algorithms implemented iteratively, Big-O analysis is much simpler because loops clearly define when to stop and how much to increment in each iteration. For analyzing recursive algorithms, recurrence relations are used. Recurrence relations consist of two-part analysis:
+
+
+```javascript
+function getNthFibo(n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return getNthFibo(n - 1) + getNthFibo(n - 2);
+    }
+}
+```
+The base case has a time complexity of O(1). The recursive case calls itself twice. Let’s represent this as:
+
+$T(n)=T(n−1)+T(n−2)+O(1)$
+## The delete Operator (❌❌❌)
+
+Base case: $T(n)=O(1)$
+
+Recursive case: $T(n) = T (n − 1) + T (n − 2) + O(1)$
+
+Now, this relation means that since $T(n) = T (n − 1) + T (n − 2) + O(1)$ , then (by replacing $n$ with $n−1$ ), $T(n − 1) = T(n − 2) + T(n − 3) + O(1)$ . Replacing $n−1$ with $n−2$ yields to $T(n − 2) = T(n − 3) + T(n − 4) + O(1)$ . Therefore, you can see that for every call, there are two more calls. In other words, this has a time complexity of $O(2^n)$
+
+## Master Theorem (🔠🔡🔤)
+
+The master theorem states the following:
+
+* Given a recurrence relation of the form $ T(n)= aT(n/b)+ O(n^c) $
+
+* Where $a>=1$ and $b>=1$ , but there are three case, which we will discuss in the next section.
+
+a is the coefficient that is multiplied by the recursive call. b is the logarithmic term, which is the term that divides the nn during the recursive call. Finally, c is the polynomial term on the nonrecursive component of the equation.
+
+The first case is when the polynomial term $O(n^c)$ is less than $log_b(a)$
+
+Case 1 : If $ c< log_b(a) $ then $ T(n)= O(n^ {(log_b(a))}) $
+
+Case 2 : If $ c= log_b(a) $ then $ T(n)= O(n^{c}log(n)) $
+
+Case 3 : If $ c> log_b(a) $ then $ T(n)= O(f(n)) $
+
+## Recursive Call Stack Memory (🔁💾)
+
+When a recursive function calls itself, that takes up memory, and this is really important in Big-O space complexity analysis.
+
+For example, this simple function for printing from nn to $1$ recursively takes $O(n)$ in space:
+
+
+```javascript
+
+function printNRecursive(n) {
+    console.log(n);
+    if (n > 1) {
+        printNRecursive(n - 1);
+    }
+}
+printNRecursive(10);
+```
+Each recursive call must be stored in memory until the base case is resolved. Recursive algorithms take extra memory because of the call stack.
+
+Recursive functions have an additional space complexity cost that comes from the recursive calls that need to be stored in the operating system’s memory. The stack is accumulated(collected) until the base case is solved.
+
+This is why an iterative solution may be preferred over the recursive solution. In the worst case, if the base case is implemented incorrectly, the recursive function will cause the program to crash because of a stack overflow error. (⚠️)

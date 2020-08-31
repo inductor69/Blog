@@ -1,0 +1,135 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-6]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-6].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# JavaScript Object(😱 🔥 🎲)
+
+This part will focus on what JavaScript objects are, how they are declared, and how their properties can be changed. In addition, this part will cover how JavaScript classes are implemented using prototypal inheritance. Also this part will be short. (👍)
+
+---
+
+## JavaScript Object Property (🎲🎲)
+
+JavaScript objects can be created via the object literal {} or via the syntax new Object(). Additional properties can be added or accessed in one of two ways: object.propertyName or object[ 'propertyName' ]:
+
+```javascript
+var javaScriptObject = {}; // Object Literal or via 'var javaScriptObject = New Object()'
+var testArray = [1, 2, 3, 4];
+
+javaScriptObject.array = testArray; // Added
+console.log(javaScriptObject); // {array: [1,2,3,4]}
+
+javaScriptObject['title'] = 'Algorithms'; // Added
+console.log(javaScriptObject); // {array: [1,2,3,4], title: 'Algorithms'}
+```
+
+## Execution:
+
+```javascript
+    var javaScriptObject = {}; // Object Literal or via 'var javaScriptObject = New Object()'
+var testArray = [1, 2, 3, 4];
+
+javaScriptObject.array = testArray; // Added
+console.log(javaScriptObject); // {array: [1,2,3,4]}
+
+javaScriptObject['title'] = 'Algorithms'; // Added
+console.log(javaScriptObject); // {array: [1,2,3,4], title: 'Algorithms'}
+```
+The array and title property was added to the JavaScript object.
+
+## Prototypal Inheritance (🐔↔️🐓)
+
+In JavaScript, the function is added as a property of class. Here is an example of a class in JavaScript using this.functionName = function(){}:
+
+```javascript
+function ExampleClass() {
+    this.name = "JavaScript";
+    this.sayName = function () {
+        console.log(this.name);
+    }
+}
+
+// New Object
+var example1 = new ExampleClass();
+example1.sayName(); // Prints "JavaScript"
+```
+This adds the sayName function in the constructor(which is the ExampleClass). This pattern is known as prototypal inheritance :
+Prototypal inheritance is the only method of inheritance in JavaScript. To add functions of a class, simply use the .prototype property. (😃)
+
+When you use the .prototype property, you are extending
+the property of the object. This isn’t possible for compiled languages. because they will throw an error on compilation (❗). This unique property of JavaScript lets developers take advantage of the prototypical inheritance. (😇) Here’s an example of using .prototype:
+
+
+```javascript
+
+function ExampleClass() {
+    this.array = [1, 2, 3, 4, 5];
+    this.name = "JavaScript";
+}
+
+// New object
+var example1 = new ExampleClass();
+
+// Adding sayName function using prototype
+ExampleClass.prototype.sayName = function () {
+    console.log(this.name);
+}
+
+example1.sayName(); // Prints "JavaScript"
+```
+
+# Constructor and Variables (🔧🔜📦)
+
+Because variables of a class in JavaScript are properties of that class, any properties declared with this.propertyName will be available in public. This means that the object’s properties can be accessed in other scopes:
+
+```javascript
+function ExampleClass(name, size) {
+    this.name = name;
+    this.size = size;
+}
+
+var example = new ExampleClass("Public", 5);
+console.log(example); // Prints '{name:"Public", size: 5}'
+
+// Accessing public variables
+console.log(example.name); // Prints "Public"
+console.log(example.size); // Prints '5'
+
+```
+To mimic a private variable, you can declare a local variable and have getter/setters(we will see that later (😉)) that allow access to that variable. This way, the variable is available only to the constructor’s scope:
+
+```javascript
+function ExampleClass(name, size) {
+    var privateName = name;
+    var privateSize = size;
+
+    this.getName = function () { return privateName; }
+    this.setName = function (name) { privateName = name; }
+
+    this.getSize = function () { return privateSize; }
+    this.setSize = function (size) { privateSize = size; }
+}
+
+var example = new ExampleClass("Edison", 3);
+example.setSize(12);
+console.log(example.privateName); // Prints 'undefined'
+console.log(example.getName()); // Prints 'Edison'
+console.log(example.size); // Prints 'undefined'
+console.log(example.getSize()); // Prints '12' instead of '3', why?
+```
+
+## Summary (📚)
+
+In JavaScript, prototypical inheritance is the preferred method of inheritance. Prototypical inheritance works by adding new functions to a JavaScript class via .prototype. A private variable is not supported in JavaScript, to mimic the private variable, you need to create a variable that is scoped to the constructor function. Declaring a variable as part of that object in the constructor via this.variableName automatically makes that property public.
+
+

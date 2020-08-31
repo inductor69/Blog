@@ -1,0 +1,1214 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-14]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-14].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Trees (😱 🔥 🌱)
+
+A general tree data structure is composed of nodes with children nodes. The top node is called the root node. This part 15 will explore different types of trees such as binary trees, binary search trees, and self-balancing binary search trees. First, this part 15 will cover what trees are and how they are structured. Then, it will cover methods of traversing(crossing or taking a zigzag path) the tree data structure in detail. Finally, you will learn about binary search trees and self-balancing binary search trees to understand how to store searchable data. (😃)
+---
+
+## General Tree Structure (📖🌱)
+
+A stack is a data structure in which only the last inserted element can be removed and accessed. Think about stacking(covering with) plates on a table. To get to the bottom one, you must remove the top. This is a principle known as Last In, First Out (LIFO). A stack is great because it is fast. Since the lookup and insertion happen in a constant time of $O(1)$ . Stacks should be used when you need to work in the LIFO form to access only the last-added element. The limitation of stacks is that they cannot access the non-last-added element directly.
+
+```javascript
+General Tree Structure (📖🌱)
+
+```
+
+
+## Binary Trees (🔢🌱)
+
+A binary tree is a type of tree that has only two children nodes: left and right as show in below:
+```javascript
+// Binary Tree Structure: Tree Node
+function BinaryTreeNode(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+```
+A binary tree always has a root node (the node at the top), which is initialized to null before any element is inserted as shown in the example below:
+
+```javascript
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+```
+
+
+## Tree Traversal (🌱❌)
+
+Traversal through an array is simple: you access the index and increment the index until the index reaches the size limit. But with trees, the left and right pointers have to be followed in order to go through every element in the tree. There are various ways to do this, the most popular traversal techniques are: pre-order traversal, post-order traversal, in-order traversal, and level-order traversal.
+
+## Pre-Order Traversal (➡️📦❌)
+
+Pre-order traversal visits nodes in the following order: (1️⃣) root, (2️⃣) left, and (3️⃣) right. In Figure 15-3, you can see that 42 is the root, so it’s visited first. Then it goes left; at this point, the left of the parent 41 is now considered the new root. Then it goes left again to 10. So, 10 is set to the new root. Then 40 is visited because that is the right of the parent 41. 
+
+
+Recursively, this is implemented easily. The base case terminates when the node is null. Otherwise, it prints the node value and then calls the recursive function on its left child and then its right child:
+
+```javascript
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// Pre-Order Traversal: Recursive
+BinaryTree.prototype.traversePreOrderRecursive = function () {
+    traversePreOrderHelper(this._root);
+
+    function traversePreOrderHelper(node) {
+        if(!node) return;
+
+        console.log(node.value);
+        traversePreOrderHelper(node.left);
+        traversePreOrderHelper(node.right);
+    }
+}
+```
+This can also be done iteratively, but it is harder to implement:
+
+```javascript
+// Binary Tree Structure: Tree Node
+function BinaryTreeNode(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+}
+
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// Pre-Order Traversal: Iterative
+BinaryTree.prototype.traversePreOrderIterative = function () {
+    // Create new empty stack and push the root to it.
+    var nodeStack = [];
+    nodeStack.push(this._root);
+
+    // Pop all items one by one. 
+    // Do the following for every popped item:
+    //  a) Print it
+    //  b) Push its right child
+    //  c) Push its left child
+    // Note: Right child is pushed first...
+    // ...so that left is processed first
+
+    while (nodeStack.length) {
+        // Pop the top item from the stack and print it
+        // We use push earlier...
+        // ...so that means the first added element...
+        // ...is at the last of the stack
+        // So that means, Pop the top item...
+        // ...from the stack
+
+        var node = nodeStack.pop();
+        console.log(node.value);
+        // Push right and left children...
+        // ... of the popped node to stack
+        // Note: Right child is pushed first...
+        // ...so that left is processed first
+        // We'll see that below:
+
+        // Right
+        if (node.right)
+            nodeStack.push(node.right);
+
+        // Left
+        if (node.left)
+            nodeStack.push(node.left);
+
+    }
+}
+```
+Here is the result: $42, 41, 10, 40, 50, 45, 75$
+
+## In-Order Traversal (📦➡️❌)
+
+
+In-order traversal visits nodes in the following order: (1️⃣) left, (2️⃣) root (current node), (3️⃣) right
+
+In-order traversal is also implemented easily with recursion. The base case is when a node is null. It calls the recursive function on the left child, prints the current node, and then calls the recursive function on the right child:
+
+
+```javascript
+
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// In-Order Traversal: Recursive
+BinaryTree.prototype.traverseInOrderRecursive = function () {
+    traverseInOrderHelper(this._root);
+
+    function traverseInOrderHelper(node) {
+        if (!node) return;
+
+        traverseInOrderHelper(node.left);
+        console.log(node.value);
+        traverseInOrderHelper(node.right);
+    }
+}
+```
+This can also be done iteratively: 
+
+```javascript
+
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// In-Order Traversal: Iterative
+BinaryTree.prototype.traverseInOrderIterative = function () {
+    var current = this._root,
+        s = [],
+        done = false;
+
+    while (!done) {
+        // Reach the left most node of the current node
+        if (current != null) {
+            // Place pointer to a tree node on the stack
+            // before traversing the node's left subtree
+            s.push(current);
+            current = current.left;
+        } else {
+            if (s.length) {
+                current = s.pop();
+                console.log(current.value);
+                current = current.right;
+            } else {
+                done = true;
+            }
+        }
+    }
+}
+```
+Here is the result of this traversal: $10, 41, 40, 42, 45, 50, 75$
+
+
+## Post-Order Traversal (❌📦➡️)
+
+Post-order traversal visits nodes in the following order: (1️⃣) left, (2️⃣) right, (3️⃣) root.
+
+```javascript
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// Post-Order Traversal: Recursive
+BinaryTree.prototype.traversePostOrderRecursive = function () {
+    traversePostOrderHelper(this._root);
+
+    function traversePostOrderHelper(node) {
+        if (node.left)
+            traversePostOrderHelper(node.left);
+        if (node.right)
+            traversePostOrderHelper(node.right);
+        console.log(node.value);
+    }
+}
+```
+This can also be done iteratively:
+
+```javascript
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// Post-Order Traversal: Iterative
+BinaryTree.prototype.traversePostOrderIterative = function () {
+    // Create two stacks
+    var s1 = [],
+        s2 = [];
+
+    // Push root to first stack
+    s1.push(this._root);
+
+    // Run while first stack is not empty
+    while (s1.length) {
+        // Pop an item from s1 and append it to s2
+        var node = s1.pop();
+        s2.push(node);
+
+        // Pust left and right children of removed item to s1
+        if (node.left)
+            s1.push(node.left);
+
+        if (node.right)
+            s1.push(node.right);
+    }
+
+    // Print all elements of second stack
+    while (s2.length) {
+        var node = s2.pop();
+        console.log(node.value);
+    }
+}
+```
+Here is the result: $10, 40, 41, 45, 75, 50, 42$
+
+## Level-Order Traversal (➡️📏❌)
+
+
+Level-order traversal is also known as breadth first search (BFS):
+
+
+```javascript
+// Binary Tree
+function BinaryTree() {
+    this._root = null;
+}
+
+// Level-Order Traversal
+BinaryTree.prototype.traverseLevelOrder = function () {
+    // Breath first search
+    var root = this._root,
+        queue = [];
+
+    if (!root) return;
+    queue.push(root);
+
+    while (queue.length) {
+        var temp = queue.shift();
+        console.log(temp.value);
+
+        if (temp.left)
+            queue.push(temp.left);
+
+        if (temp.right)
+            queue.push(temp.right);
+    }
+}
+```
+Here is the result: $ 42, 41, 50, 10, 40, 45, 75 $
+
+## Tree Traversal Summary (🌱❌📚)
+
+If you need to explore the roots before leaves, choose pre-order
+traversal because you will encounter all the roots before all the leaves (🍃). If you need to explore all the leaves before any nodes, choose post-order traversal because you don’t waste any time inspecting roots when searching for leaves (🍃). If you want to flatten the tree into its original sequence, then you should use an in-order traversal. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence that was used to create it.
+
+Time Complexity: $O(n)$
+
+The time complexity of any of these traversals is the same because each traversal requires that all nodes are visited.
+
+
+## Binary Search Trees (🔎🌱)
+
+
+Binary search trees (BSTs) also have two children, left and right. However, in a binary search tree, the left child is smaller than the parent, and the right child is bigger than the parent. BSTs have this structure because this enables searching, inserting, and removing specific values with $O log_2(n)$ time complexity.
+
+Binary search trees have a root node, which is originally initialized null (before any item is inserted):
+```javascript
+// Binary Search Tree
+function BinarySearchTree() {
+    this._root = null;
+}
+```
+
+In balanced binary search tree, the height is minimized by having children on both the left and right sides. However, In an unbalanced tree where children are only to the right of the parent. This has impact on the data structure and increases the time complexity of insertion, deletion, and search from $ O(log_2(n)) $ to $ O(n) $
+The perfect balanced tree is $ log_2(n)$  while an unbalanced tree can be $ n $ in the worst case.
+
+
+## Insertion (➡️📦⬅️)
+
+Inserting into the BST requires a couple of steps. First, if the root is empty, the root becomes the new node. Otherwise, a while loop is used to traverse the BST until the right condition is met. At each iteration, it is checked whether the new node is greater or smaller than the currentRoot:
+```javascript
+// Binary Search Tree
+function BinarySearchTree() {
+    this._root = null;
+}
+
+// Insert
+BinarySearchTree.prototype.insert = function (value) {
+    var thisNode = { left: null, right: null, value: value };
+
+    if (!this._root) {
+        // if there is no root value yet
+        this._root = thisNode;
+    } else {
+        // loop traverse until...
+        //... the right condition is met
+        var currentRoot = this._root;
+        while (true) {
+            if (currentRoot.value > value) {
+                // Let's increment if it's...
+                // ...not a null and insert if...
+                // ...it is a null
+                if (currentRoot.left != null) {
+                    currentRoot = currentRoot.left;
+                } else {
+                    currentRoot.left = thisNode;
+                    break;
+                }
+            } else if (currentRoot.value < value) {
+                // if bigger than current, put it on the right
+                // Let's increment if it's...
+                // ...not a null and insert if...
+                // ...it is a null
+                if (currentRoot.right != null) {
+                    currentRoot = currentRoot.right;
+                } else {
+                    currentRoot.right = thisNode;
+                    break;
+                }
+            } else {
+                // In case that both are the same, break it
+                break;
+            }
+        }
+    }
+}
+```
+Time Complexity (for balanced trees): $ O(log_2(n)) $
+
+Time Complexity (for unbalanced trees): $ O(n) $
+
+
+## Deletion (❌📦❌)
+
+
+This algorithm works by first traversing down the tree looking for the node with the specified value. When the node is found, there are three possible cases:
+
+Case 1: The node has no children If the node has no child, return null. That node has been deleted now.
+
+Case 2: The node has one child If the node has one child, simply return the existing child. That child has now bubbled up and replaced the parent.
+
+Case 3: The node has two children If the node has two children, either find the maximum of the left or find the minimum of the right to replace that node.
+
+The following code (below) implements the described three cases. First, it traverses recursively until one of those cases is met, and then the node is removed:
+
+```javascript
+// Binary Search Tree
+function BinarySearchTree() {
+    this._root = null;
+}
+
+// Remove
+BinarySearchTree.prototype.remove = function (value) {
+
+    return deleteRecursively(this._root, value);
+
+    function deleteRecursively(root, value) {
+        if (!root) {
+            return null;
+        } else if (value < root.value) {
+            root.left = deleteRecursively(root.left, value);
+        } else if (value > root.value) {
+            root.right = deleteRecursively(root.right, value);
+        } else {
+            // No child
+            if (!root.left && !root.right) {
+                // Case 1:
+                return null;
+            } else if (!root.left) {
+                // Case 2:
+                root = root.right;
+                return root;
+            } else if (!root.right) {
+                // Case 2:
+                root = root.left;
+                return root;
+            } else {
+                // Case 3:
+                var temp = findMin(root.right);
+                root.value = temp.value;
+                root.right = deleteRecursively(root.right, temp.value);
+                return root;
+            }
+        }
+        return root;
+    }
+
+    function findMin(root){
+        while (root.left) {
+            root = root.left;
+        }
+        return root;
+    }
+}
+```
+Time Complexity (for balanced tree): $O(log_2(n))$
+
+Time Complexity (for unbalanced tree): $ O(n) $
+
+Time complexity for deletion is also  $O(log_2(n))$ because at most, the height (top or vertical dimension) need to be traversed to find and delete the desired node.
+
+
+## Search (🔎📦🔍)
+
+Search can be performed using the property that BST node’s left child is always smaller than its parent and that BST node’s right child is always greater than its parent. Traversing the tree can be done by checking whether currentRoot is smaller or greater than the value to be searched. If currentRoot is smaller, the right child is visited. If currentRoot is bigger, the left child is visited.
+
+```javascript
+// Binary Search Tree
+function BinarySearchTree() {
+    this._root = null;
+}
+
+// Insert
+
+BinarySearchTree.prototype.insert = function (value) {
+    var thisNode = { left: null, right: null, value: value };
+
+    if (!this._root) {
+        // if there is no root value yet
+        this._root = thisNode;
+    } else {
+        // loop traverse until...
+        //... the right condition is met
+        var currentRoot = this._root;
+        while (true) {
+            if (currentRoot.value > value) {
+                // Let's increment if it's...
+                // ...not a null and insert if...
+                // ...it is a null
+                if (currentRoot.left != null) {
+                    currentRoot = currentRoot.left;
+                } else {
+                    currentRoot.left = thisNode;
+                    break;
+                }
+            } else if (currentRoot.value < value) {
+                // if bigger than current, put it on the right
+                // Let's increment if it's...
+                // ...not a null and insert if...
+                // ...it is a null
+                if (currentRoot.right != null) {
+                    currentRoot = currentRoot.right;
+                } else {
+                    currentRoot.right = thisNode;
+                    break;
+                }
+            } else {
+                // In case that both are the same, break it
+                break;
+            }
+        }
+    }
+}
+
+// Search
+BinarySearchTree.prototype.findNode = function (value) {
+    var currentRoot = this._root,
+        found = false;
+
+    while (currentRoot) {
+        if (currentRoot.value > value) {
+            currentRoot = currentRoot.left;
+        } else if (currentRoot.value < value) {
+            currentRoot = currentRoot.right;
+        } else {
+            // We've found the node
+            found = true;
+            break;
+        }
+    }
+
+    return found;
+}
+
+// Instance of the Binary Search Tree class
+var bst = new BinarySearchTree();
+
+// Insert
+bst.insert(1); // Add 1
+bst.insert(2); // Add 2
+bst.insert(3); // Add 3
+
+// Search
+console.log(bst.findNode(3)); // Prints "true"
+console.log(bst.findNode(4)); // Prints "false"
+```
+Time Complexity (for balanced tree): $ $O(log_2(n))$ $ 
+
+Time Complexity (for unbalanced tree): $ O(n) $
+
+## AVL Trees (📐🌱)
+
+AVL is a binary search tree that balances itself; it’s named after the inventors Georgy Adelson-Velsky (See on Wikipedia) and Evgenii Landis (See on Wikipedia). An AVL tree keeps the BST height to a minimum and ensures $O(log_2(n))$  time complexities for search, insertion, and deletion. In previous examples, we defined both TreeNode and a Tree class and set the root of Tree as a TreeNode class. However, for the AVL tree implementation, only the AVLTree class, which represents the node of the AVL tree, will be used for the simplification of the code:
+
+```javascript
+// AVL Tree
+function AVLTree (value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+```
+
+The height of the AVL tree is based on the height of the children and can be calculated using the following code block:
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+
+    if (this.node == null) {
+        this.depth = 1;
+    }
+
+    if (this.left != null) {
+        this.depth = this.left.depth + 1;
+    }
+
+    if (this.right != null && this.depth <= this.right.depth) {
+        this.depth = this.right.depth + 1;
+    }
+}
+```
+## Single Rotation (🔄1️⃣🔄)
+
+AVL trees rotate their children to maintain balance after insertion.
+
+
+### Rotate Left (1️⃣↩️1️⃣↩️)
+
+To perform a left rotation, first get the right child and store it. This is the “original” right child. The original right child is to be the parent of the node now. Set the node’s left child to be the original right child’s left child. Finally, set the original right child to be the node (or parent node):
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+
+    if (this.node == null) {
+        this.depth = 0;
+    } else {
+        this.depth = 1;
+    }
+
+    if (this.left != null) {
+        this.depth = this.left.depth + 1;
+    }
+
+    if (this.right != null && this.depth <= this.right.depth) {
+        this.depth = this.right.depth + 1;
+    }
+}
+
+// Rotate Left
+AVLTree.prototype.rotateLL = function () {
+
+    var valueBefore = this.value;
+    var rightBefore = this.right;
+    this.value = this.left.value;
+
+    this.right = this.left;
+    this.left = this.left.left;
+    this.right.left = this.right.right;
+    this.right.right = rightBefore;
+    this.right.value = valueBefore;
+
+    this.right.setDepthBasedOnChildren();
+    this.setDepthBasedOnChildren();
+}
+```
+### Rotate Right (1️⃣↪️1️⃣↪️)
+
+To implement this algorithm, first get the left child and store it. This the original left child. The original left child is to be the parent of the node now. Set the node’s right child to be the original left child’s right child. Finally, set the right child to be the node (or parent node):
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+
+    if (this.node == null) {
+        this.depth = 0;
+    } else {
+        this.depth = 1;
+    }
+
+    if (this.left != null) {
+        this.depth = this.left.depth + 1;
+    }
+
+    if (this.right != null && this.depth <= this.right.depth) {
+        this.depth = this.right.depth + 1;
+    }
+}
+
+// Rotate Right
+AVLTree.prototype.rotateRR = function () {
+    // The right side is too long => rotate from the right
+    // (_not_rightwards)
+    var valueBefore = this.value;
+    var leftBefore = this.left;
+    this.value = this.right.value;
+
+    this.left = this.right;
+    this.right = this.right.right;
+    this.left.right = this.left.left;
+    this.left.left = leftBefore;
+    this.left.value = valueBefore;
+
+    this.left.setDepthBasedOnChildren();
+    this.setDepthBasedOnChildren();
+}
+```
+### Double Rotation (🔄2️⃣🔄)
+
+If an AVL tree is still unbalanced after one rotation, it has to rotate twice for full balance.
+
+* Rotate Right And Then Left (2️⃣↪️2️⃣↩️)
+
+* Rotate Left And Then Right (2️⃣↩️2️⃣↪️)
+
+### Balancing the tree (📐🌱📐)
+
+To check for balance of the AVL tree, it is a simple comparison of the left and right children’s heights. When left is bigger than right, left rotation is done. When right is bigger than left, right rotation is done:
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Rotate Right
+AVLTree.prototype.rotateRR = function () {
+    // The right side is too long => rotate from the right
+    // (_not_rightwards)
+    var valueBefore = this.value;
+    var leftBefore = this.left;
+    this.value = this.right.value;
+
+    this.left = this.right;
+    this.right = this.right.right;
+    this.left.right = this.left.left;
+    this.left.left = leftBefore;
+    this.left.value = valueBefore;
+
+    this.left.updateInNewLocation();
+    this.updateInNewLocation();
+}
+
+// Rotate Left
+AVLTree.prototype.rotateLL = function () {
+
+    var valueBefore = this.value;
+    var rightBefore = this.right;
+    this.value = this.left.value;
+
+    this.right = this.left;
+    this.left = this.left.left;
+    this.right.left = this.right.right;
+    this.right.right = rightBefore;
+    this.right.value = valueBefore;
+
+    this.right.getDepthFromChildren();
+    this.getDepthFromChildren();
+}
+
+// Balance
+AVLTree.prototype.balance = function () {
+    var ldepth = this.left == null ? 0 : this.left.depth;
+    var rdepth = this.right == null ? 0 : this.right.depth;
+
+    if (ldepth > rdepth + 1) {
+        // RR or LL rotation
+        var lldepth = this.left.left == null ? 0 : this.left.left.depth;
+        var lrdepth = this.left.right == null ? 0 : this.left.right.depth;
+
+        if (lldepth < lrdepth) {
+            // LR Rotation consists of a RR rotation of the left child
+            this.left.rotateRR();
+            // Plus a LL rotation of this node, which happens anyway
+        }
+        this.rotateLL();
+    } else if (ldepth + 1 < rdepth) {
+        // RR or RL rotation
+        var rrdepth = this.right.right == null ? 0 : this.right.right.depth;
+        var rldepth = this.right.left == null ? 0 : this.right.left.depth;
+
+        if (rldepth > rrdepth) {
+            // RR rotation consists of a LL rotation of the right child
+            this.right.rotateLL();
+            // Plus a RR rotation of this node, which happens anyway
+        }
+        this.rotateRR();
+    }
+}
+```
+## Insertion (➡️🌱⬅️)
+
+Insertion in AVL BST is the same as the insertion in normal BST except that, once inserted, the parent must balance its children and set the right depth:
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+
+    if (this.node == null) {
+        this.depth = 0;
+    } else {
+        this.depth = 1;
+    }
+
+    if (this.left != null) {
+        this.depth = this.left.depth + 1;
+    }
+
+    if (this.right != null && this.depth <= this.right.depth) {
+        this.depth = this.right.depth + 1;
+    }
+}
+
+// Rotate Right
+AVLTree.prototype.rotateRR = function () {
+    // The right side is too long => rotate from the right
+    // (_not_rightwards)
+    var valueBefore = this.value;
+    var leftBefore = this.left;
+    this.value = this.right.value;
+
+    this.left = this.right;
+    this.right = this.right.right;
+    this.left.right = this.left.left;
+    this.left.left = leftBefore;
+    this.left.value = valueBefore;
+
+    this.left.updateInNewLocation();
+    this.updateInNewLocation();
+}
+
+// Rotate Left
+AVLTree.prototype.rotateLL = function () {
+
+    var valueBefore = this.value;
+    var rightBefore = this.right;
+    this.value = this.left.value;
+
+    this.right = this.left;
+    this.left = this.left.left;
+    this.right.left = this.right.right;
+    this.right.right = rightBefore;
+    this.right.value = valueBefore;
+
+    this.right.getDepthFromChildren();
+    this.getDepthFromChildren();
+}
+
+// Balance
+AVLTree.prototype.balance = function () {
+    var ldepth = this.left == null ? 0 : this.left.depth;
+    var rdepth = this.right == null ? 0 : this.right.depth;
+
+    if (ldepth > rdepth + 1) {
+        // RR or LL rotation
+        var lldepth = this.left.left == null ? 0 : this.left.left.depth;
+        var lrdepth = this.left.right == null ? 0 : this.left.right.depth;
+
+        if (lldepth < lrdepth) {
+            // LR Rotation consists of a RR rotation of the left child
+            this.left.rotateRR();
+            // Plus a LL rotation of this node, which happens anyway
+        }
+        this.rotateLL();
+    } else if (ldepth + 1 < rdepth) {
+        // RR or RL rotation
+        var rrdepth = this.right.right == null ? 0 : this.right.right.depth;
+        var rldepth = this.right.left == null ? 0 : this.right.left.depth;
+
+        if (rldepth > rrdepth) {
+            // RR rotation consists of a LL rotation of the right child
+            this.right.rotateLL();
+            // Plus a RR rotation of this node, which happens anyway
+        }
+        this.rotateRR();
+    }
+}
+
+// Insert
+AVLTree.prototype.insert = function (value) {
+    var childInserted = false;
+
+    if (value == this.value) {
+        // Should be all unique
+        return false;
+    } else if (value < this.value) {
+        if (this.left == null) {
+            this.left = new AVLTree(value);
+            childInserted = true;
+        } else {
+            childInserted = this.left.insert(value);
+            if (childInserted == true) this.balance();
+        }
+    } else if (value > this.value) {
+        if (this.right == null) {
+            this.right = new AVLTree(value);
+            childInserted = true;
+        } else {
+            childInserted = this.right.insert(value);
+            if (childInserted == true) this.balance();
+        }
+    }
+
+    if (childInserted == true) this.setDepthBasedOnChildren();
+    return childInserted;
+}
+```
+Time Complexity: $ O(nlog_2(n)) $
+
+Space Complexity: $ O(nlog_2(n)) $
+
+## Deletion (❌🌱❌)
+
+AVL BST is a type of BST, and therefore the deletion function is the same. Adjusting the depths can be done by calling setDepthBasedOnChildren() during traversal:
+
+```javascript
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+
+    if (this.node == null) {
+        this.depth = 0;
+    } else {
+        this.depth = 1;
+    }
+
+    if (this.left != null) {
+        this.depth = this.left.depth + 1;
+    }
+
+    if (this.right != null && this.depth <= this.right.depth) {
+        this.depth = this.right.depth + 1;
+    }
+}
+
+// Rotate Right
+AVLTree.prototype.rotateRR = function () {
+    // The right side is too long => rotate from the right
+    // (_not_rightwards)
+    var valueBefore = this.value;
+    var leftBefore = this.left;
+    this.value = this.right.value;
+
+    this.left = this.right;
+    this.right = this.right.right;
+    this.left.right = this.left.left;
+    this.left.left = leftBefore;
+    this.left.value = valueBefore;
+
+    this.left.updateInNewLocation();
+    this.updateInNewLocation();
+}
+
+// Rotate Left
+AVLTree.prototype.rotateLL = function () {
+
+    var valueBefore = this.value;
+    var rightBefore = this.right;
+    this.value = this.left.value;
+
+    this.right = this.left;
+    this.left = this.left.left;
+    this.right.left = this.right.right;
+    this.right.right = rightBefore;
+    this.right.value = valueBefore;
+
+    this.right.getDepthFromChildren();
+    this.getDepthFromChildren();
+}
+
+// Balance
+AVLTree.prototype.balance = function () {
+    var ldepth = this.left == null ? 0 : this.left.depth;
+    var rdepth = this.right == null ? 0 : this.right.depth;
+
+    if (ldepth > rdepth + 1) {
+        // RR or LL rotation
+        var lldepth = this.left.left == null ? 0 : this.left.left.depth;
+        var lrdepth = this.left.right == null ? 0 : this.left.right.depth;
+
+        if (lldepth < lrdepth) {
+            // LR Rotation consists of a RR rotation of the left child
+            this.left.rotateRR();
+            // Plus a LL rotation of this node, which happens anyway
+        }
+        this.rotateLL();
+    } else if (ldepth + 1 < rdepth) {
+        // RR or RL rotation
+        var rrdepth = this.right.right == null ? 0 : this.right.right.depth;
+        var rldepth = this.right.left == null ? 0 : this.right.left.depth;
+
+        if (rldepth > rrdepth) {
+            // RR rotation consists of a LL rotation of the right child
+            this.right.rotateLL();
+            // Plus a RR rotation of this node, which happens anyway
+        }
+        this.rotateRR();
+    }
+}
+
+// Delete
+AVLTree.prototype.remove = function (value) {
+    return deleteRecursively(this, value);
+
+    function deleteRecursively(root, value) {
+        if (!root) {
+            return null;
+        } else if (value < root.value) {
+            root.left = deleteRecursively(root.left, value);
+        } else if (value > root.value) {
+            root.right = deleteRecursively(root.right, value);
+        } else {
+            // No Child
+            if (!root.left && !root.right) {
+                // Case 1:
+                return null;
+            } else if (!root.left) {
+                root = root.right;
+                return root;
+            } else if (!root.right) {
+                root = root.left;
+                return root;
+            } else {
+                var temp = findMin(root.right);
+                root.value = temp.value;
+                root.right = deleteRecursively(root.right, temp.value);
+                return root;
+            }
+        }
+
+        // Only difference from the BST one
+        root.setDepthBasedOnChildren();
+        return root;
+    }
+
+    function findMin(root) {
+        while (root.left) root = root.left;
+        return root;
+    }
+}
+```
+
+## Putting It All Together: AVL Tree (🌳🌳🌳)
+
+```javascript
+
+    
+// AVL Tree
+function AVLTree(value) {
+    this.left = null;
+    this.right = null;
+    this.value = value;
+    this.depth = 1;
+}
+
+// Set Depth Based On Children
+AVLTree.prototype.setDepthBasedOnChildren = function () {
+if (this.node == null) {
+    this.depth = 1;
+}
+
+if (this.left != null) {
+    this.depth = this.left.depth + 1;
+}
+
+if (this.right != null && this.depth <= this.right.depth) {
+    this.depth = this.right.depth + 1;
+}
+
+}
+
+// Rotate Right
+AVLTree.prototype.rotateRR = function () {
+    // The right side is too long => rotate from the right
+    // (_not_rightwards)
+    var valueBefore = this.value;
+    var leftBefore = this.left;
+    this.value = this.right.value;
+this.left = this.right;
+this.right = this.right.right;
+this.left.right = this.left.left;
+this.left.left = leftBefore;
+this.left.value = valueBefore;
+
+this.left.setDepthBasedOnChildren();
+this.setDepthBasedOnChildren();
+
+}
+
+// Rotate Left
+AVLTree.prototype.rotateLL = function () {
+var valueBefore = this.value;
+var rightBefore = this.right;
+this.value = this.left.value;
+
+this.right = this.left;
+this.left = this.left.left;
+this.right.left = this.right.right;
+this.right.right = rightBefore;
+this.right.value = valueBefore;
+
+this.right.setDepthBasedOnChildren();
+this.setDepthBasedOnChildren();
+
+}
+
+// Balance
+AVLTree.prototype.balance = function () {
+    var ldepth = this.left == null ? 0 : this.left.depth;
+    var rdepth = this.right == null ? 0 : this.right.depth;
+if (ldepth > rdepth + 1) {
+    // RR or LL rotation
+    var lldepth = this.left.left == null ? 0 : this.left.left.depth;
+    var lrdepth = this.left.right == null ? 0 : this.left.right.depth;
+
+    if (lldepth < lrdepth) {
+        // LR Rotation consists of a RR rotation of the left child
+        this.left.rotateRR();
+        // Plus a LL rotation of this node, which happens anyway
+    }
+    this.rotateLL();
+} else if (ldepth + 1 < rdepth) {
+    // RR or RL rotation
+    var rrdepth = this.right.right == null ? 0 : this.right.right.depth;
+    var rldepth = this.right.left == null ? 0 : this.right.left.depth;
+
+    if (rldepth > rrdepth) {
+        // RR rotation consists of a LL rotation of the right child
+        this.right.rotateLL();
+        // Plus a RR rotation of this node, which happens anyway
+    }
+    this.rotateRR();
+}
+
+}
+
+// Insert
+AVLTree.prototype.insert = function (value) {
+    var childInserted = false;
+if (value == this.value) {
+    // Should be all unique
+    return false;
+} else if (value < this.value) {
+    if (this.left == null) {
+        this.left = new AVLTree(value);
+        childInserted = true;
+    } else {
+        childInserted = this.left.insert(value);
+        if (childInserted == true) this.balance();
+    }
+} else if (value > this.value) {
+    if (this.right == null) {
+        this.right = new AVLTree(value);
+        childInserted = true;
+    } else {
+        childInserted = this.right.insert(value);
+        if (childInserted == true) this.balance();
+    }
+}
+
+if (childInserted == true) this.setDepthBasedOnChildren();
+return childInserted;
+
+}
+
+// Delete
+AVLTree.prototype.remove = function (value) {
+    return deleteRecursively(this, value);
+function deleteRecursively(root, value) {
+    if (!root) {
+        return null;
+    } else if (value < root.value) {
+        root.left = deleteRecursively(root.left, value);
+    } else if (value > root.value) {
+        root.right = deleteRecursively(root.right, value);
+    } else {
+        // No Child
+        if (!root.left && !root.right) {
+            // Case 1:
+            return null;
+        } else if (!root.left) {
+            root = root.right;
+            return root;
+        } else if (!root.right) {
+            root = root.left;
+            return root;
+        } else {
+            var temp = findMin(root.right);
+            root.value = temp.value;
+            root.right = deleteRecursively(root.right, temp.value);
+            return root;
+        }
+    }
+
+    // Only difference from the BST one
+    root.setDepthBasedOnChildren()
+    return root;
+}
+
+function findMin(root) {
+    while (root.left) root = root.left;
+    return root;
+}
+
+}
+
+var avlTest = new AVLTree(1);
+avlTest.insert(2)
+avlTest.insert(3)
+avlTest.insert(4)
+avlTest.insert(5)
+avlTest.insert(123)
+avlTest.insert(203)
+avlTest.insert(2222)
+avlTest;
+
+  
+```
+Check the output.

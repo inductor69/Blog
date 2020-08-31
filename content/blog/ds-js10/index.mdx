@@ -1,0 +1,333 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-11]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-11].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Hash Tables (😱 🔥 📝)
+
+A hash table is a fixed-sized data structure in which the size is defined at the start. This part 11 explains how hash tables work, and the method of generating a unique key. By the end of this part 11, you will understand various hashing techniques and know how to implement a hash table. (😃)
+
+---
+
+## Introducing Hash Tables (📝📝)
+
+
+Hash tables are excellent for quick storage and retrieval of data based on key-value pairs. In JavaScript, JavaScript objects work this way by defining a key and value.
+
+A hash table contains two functions: put() and get(). put() is used for storing data, while get() is used for retrieving data from the hash table. Both of these functions have a time complexity of O(1)O(1) .
+
+localStorage is an example of a data structure based on a hash table. It is a native JavaScript object. It lets developers persist(preserve) data. Let's see an example of localstorage:
+
+
+# Hashing Technique (➡️🔢)
+
+The most important part of a hash table is the hash function. The hash function converts a key into an index that stores the data. The three(3) primary requirements for a good hash function are as follows(see below):
+
+* Deterministic: Equal keys produce equal values.
+* Efficiency: It should be $O(1)$ in time.
+* Uniform distribution: It makes the most use of the array. (😉)
+
+The first technique for hashing is to use prime numbers. With prime numbers, a uniform distribution of the index can be guaranteed.
+
+## Prime Number Hashing (1️⃣➡️🔢)
+
+Remember: Prime numbers in hashing are important. Modulus division using prime numbers yields an array index in a distributed(uniform) manner. Let's see an example below:
+
+We have Prime Numbers: $5$, $7$, $4$, $13$, $15$, $17$ and a Modulus Number: $11$
+
+$5 % 11=5$
+
+$7 % 11=7$
+
+$4 % 11=4$
+
+$13 % 11=2$
+
+$15 % 11=4$
+
+$17 % 11=6$
+
+Collisions can be seen with $15$ and $4$ yielding the same key because they're not even a prime numbers.
+
+Handling this collision is discussed later below. As of now, I just want to remind you that such collision exist in hash table. What is important here is that modulus by prime numbers guarantees the best distribution for a fixed size, okay? (😐). A small modulus number such as $4$ by a non-prime number which is $6$ and $10$ guarantees only a range from $0$ to $3$ and leads to a large number of collisions (💥). Let's see an example below:
+
+We have Non-Prime Numbers: $6$ , $10$ and a Modulus Number: $4$
+
+$6 % 4=2$
+
+$10 % 4=2$
+
+Remember: This is the first(or basic) hashing technique. Let's see an example hash table below:
+
+This hash table of size 11, with all empty elements is the same as the example JavaScript code below(now look (👀)):
+
+```javascript
+[
+    { keys: "", values: "" }, // 0
+    { keys: "", values: "" }, // 1
+    { keys: "", values: "" }, // 2
+    { keys: "", values: "" }, // 3
+    { keys: "", values: "" }, // 4
+    { keys: "", values: "" }, // 5
+    { keys: "", values: "" }, // 6
+    { keys: "", values: "" }, // 7
+    { keys: "", values: "" }, // 8
+    { keys: "", values: "" }, // 9
+    { keys: "", values: "" }  // 10
+]
+```
+In this example below(look first), we will only use 4 index for the sake of simplifying my explanation (😅), now in the example below, let’s hash the following key-value pairs:
+
+```javascript
+[
+    { keys: 7, values: "hi" },      // 0
+    { keys: 23, values: "hello" },  // 1
+    { keys: 43, values: "sunny" },  // 2
+    { keys: 31, values: "weather" },// 3
+]
+// We have index 0, 1, 2, 3. With a total of 4
+
+```
+We have Prime Numbers: $7$, $23$, $43$, $31$ and a Modulus Number: $11$
+
+$7 % 11=7$
+
+$23 % 11=1$
+
+$43 % 11=10$
+
+$31 % 11=9$
+
+Find the resulting hash table!
+
+Now let’s hash non-prime number 18 with modulus 11:
+
+Results: $18 % 11$ = $7$
+
+This is a problem because 7 already exists in the index and causes an index collision. With a perfect hashing function, there are no collisions. Therefore, there are strategies for handling collisions needed for hash tables which is: Linear Probing, Quadratic Probing, and Double Hashing. Let's see them below. Let's go! (🔥🔥🔥)
+
+
+## Probing (➡️↘️🔄)
+
+To work around collisions, probing finds the next available index in the array. The linear probing technique resolves conflicts by finding the next available index via incremental trials $(n+1)$, while quadratic probing uses quadratic functions to generate incremental trials $(n^2)$. Don't confuse them for now, we will see more example below! (🙉)
+
+## Linear Probing (🔢➡️➡️🔡)
+
+Linear probing works by finding the next available index by incrementing one index $(n+1)$. For example, in the case of $18$ hashing to the same key of $7$, $18$ would be hashed into key $8$ because that’s the next empty spot.
+
+When the get( key ) function is used, it has to start at the original hash and then iterate. We will discuss later what get( key ) function is just below.
+
+## Quadratic Probing (🔢↗️↘️🔡)
+
+Quadratic probing is a good technique for addressing the cluster issue (😏). Quadratic probing uses perfect squares instead of incrementing by 1, and this helps to evenly distribute the indices, as shown in Figure 11-5 below:
+
+$ h + (1)^2, h + (2)^2, h + (3)^2, h + (4)^2 = h + 1, h + 4, h + 9, h + 16 $
+
+## Double Hashing (➡️🔄🔄⬅️)
+
+Another great way to distribute the keys is by having a second hashing function that hashes the result from the original. These are the three primary requirements for a good second hash function:
+
+* Different: It needs to be different
+
+* Efficiency: It should still be $O(1)$ in time.
+
+* Nonzero: It should never evaluate to zero.
+
+A second hashing function is as follows. See below:
+
+$ hash2(x) = R − (x % R) $
+
+Here, $x$ is the result from hashing the first, and RR is less than the size of the hash table. Each hash collision is resolved by the following, where ii is the iteration trial number:
+
+$ i ∗ hash2(x) $
+
+## Hash Table Implementation (🔢🔨)
+
+In this section, you will apply three techniques to the same example. The following are the example key-value pairs that will be used:
+
+```javascript
+[
+    { keys: 7, values: "hi" },       // 0
+    { keys: 23, values: "hello" },   // 1
+    { keys: 37, values: "sunny" },   // 2
+    { keys: 47, values: "weather" }, // 3
+    { keys: 59, values: "wow" },     // 4
+    { keys: 73, values: "forty" },   // 5
+    { keys: 89, values: "happy" },   // 6
+    { keys: 97, values: "sad" }      // 7
+]
+```
+## Using Linear Probing (🔢➡️➡️)
+
+Let’s start the example with simple linear probing:
+
+```javascript
+function HashTable(size) {
+    this.size = size;
+    this.keys = this.initArray(size);
+    this.values = this.initArray(size);
+    this.limit = 0;
+}
+
+HashTable.prototype.initArray = function (size) {
+    var array = [];
+    for (var i = 0; i < size; i++) {
+        array.push(null);
+    }
+    return array;
+}
+
+HashTable.prototype.put = function (key, value) {
+    if (this.limit >= this.size) throw 'hash table is full'
+
+    var hashedIndex = this.hash(key);
+
+    // Linear probing
+    while (this.keys[hashedIndex] != null) {
+        hashedIndex++;
+
+        hashedIndex = hashedIndex % this.size;
+
+    }
+
+    this.keys[hashedIndex] = key;
+    this.values[hashedIndex] = value;
+    this.limit++;
+}
+
+HashTable.prototype.get = function (key) {
+    var hashedIndex = this.hash(key);
+
+    while (this.keys[hashedIndex] != key) {
+        hashedIndex++;
+
+        hashedIndex = hashedIndex % this.size;
+
+    }
+    return this.values[hashedIndex];
+}
+
+HashTable.prototype.log = function () {
+    return {
+        keys: this.keys,
+        values: this.values
+    };
+}
+
+HashTable.prototype.hash = function (key) {
+    // Check if int
+    if (!Number.isInteger(key)) throw 'must be int';
+    return key % this.size;
+}
+
+var exampletable = new HashTable(13);
+exampletable.put(7, "hi");
+exampletable.put(23, "hello");
+exampletable.put(37, "sunny");
+exampletable.put(47, "weather");
+exampletable.put(59, "wow");
+exampletable.put(73, "fourty");
+exampletable.put(89, "happy");
+exampletable.put(97, "sad");
+exampletable.log();
+```
+
+## Using Quadratic Probing (🔢↗️↘️)
+
+Now, we will just change the put() and get() methods from the linear probing to use quadratic probing. Let's see the example below:
+
+```javascript
+    
+HashTable.prototype.put = function(key, value) {
+    if (this.limit >= this.size) throw 'hash table is full'
+
+    var hashedIndex = this.hash(key),
+        squareIndex = 1;
+
+    // quadratic probing
+    while (this.keys[hashedIndex % this.size] != null) {
+        hashedIndex += Math.pow(squareIndex, 2);
+        squareIndex++;
+    }
+
+    this.keys[hashedIndex % this.size] = key;
+    this.values[hashedIndex % this.size] = value;
+    this.limit++;
+}
+
+HashTable.prototype.get = function(key) {
+
+    var hashedIndex = this.hash(key),
+        squareIndex = 1;
+
+    while (this.keys[hashedIndex % this.size] != key) {
+        hashedIndex += Math.pow(squareIndex, 2);
+        hashedIndex = hashedIndex % this.size;
+        squareIndex++;
+    }
+    return this.values[hashedIndex % this.size];
+}
+
+```
+
+Look at ypur output?
+
+## Using Double-Hashing in Linear Probing (➡️🔄🔄)
+
+Finally, let’s combine double-hashing and linear probing. Recall the common second hash function, $hash2(x) = R − (x % R)$ , where xx is the result from hashing the first time, and RR is less than the size of the hash table. Let's look at the example below:
+
+```javascript
+    
+HashTable.prototype.put = function(key, value) {
+    if (this.limit >= this.size) throw 'hash table is full'
+
+    var hashedIndex = this.hash(key);
+
+    while (this.keys[hashedIndex] != null) {
+        hashedIndex++;
+
+        hashedIndex = hashedIndex % this.size;
+
+    }
+    this.keys[hashedIndex] = key;
+    this.values[hashedIndex] = value;
+    this.limit++;
+}
+
+HashTable.prototype.get = function(key) {
+    var hashedIndex = this.hash(key);
+
+    while (this.keys[hashedIndex] != key) {
+        hashedIndex++;
+
+        hashedIndex = hashedIndex % this.size;
+
+    }
+    return this.values[hashedIndex];
+}
+
+HashTable.prototype.hash = function(key) {
+    if (!Number.isInteger(key)) throw 'must be int'; // check if int
+    return this.secondHash(key);
+}
+
+HashTable.prototype.secondHash = function(hashedKey) {
+    var R = this.size - 2;
+    return R - hashedKey % R;
+}
+
+```
+Check your result!
+
+Again, double-hashing results in a more uniform distributed array than the result from linear probing. Both quadratic probing and double-hashing are great techniques to reduce the number of collisions in a hash table.
+
+

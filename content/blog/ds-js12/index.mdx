@@ -1,0 +1,462 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-13]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-13].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Stacks and Queues (😱 🔥 📚)
+
+This part 12 covers stacks and queues both are data structures used in the implementation of complex data structures. You'll learn what the stacks and queues are, how they're used, when they're used, and how to implement them (😃) Let's go!
+---
+
+## Stacks (➡️❌)
+
+A stack is a data structure in which only the last inserted element can be removed and accessed. Think about stacking(covering with) plates on a table. To get to the bottom one, you must remove the top. This is a principle known as Last In, First Out (LIFO). A stack is great because it is fast. Since the lookup and insertion happen in a constant time of $O(1)$ . Stacks should be used when you need to work in the LIFO form to access only the last-added element. The limitation of stacks is that they cannot access the non-last-added element directly.
+
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+// Result
+stack; // Prints "Stack { array: [] }"
+```
+
+
+## Peek (🔍📦🔎)
+
+Peeking(or looking) at the last added element of the stack means returning the last-added element without removing it from the data structure. Peeking is often used to compare the last-added element to some variable whether the last-added element should be removed from the data structure or not. Let's look at some example below:
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Peek
+Stack.prototype.peek = function () {
+    return this.array[this.array.length - 1];
+}
+
+// Push
+Stack.prototype.push = function (value) {
+    this.array.push(value);
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+// Add
+stack.push(1);
+stack.push(2);
+stack.push(3); // Last added element
+
+// Result
+stack.peek(); // Prints "3"
+```
+Time Complexity: $ O(1) $
+
+
+## Insertion (➡️📦⬅️)
+
+Inserting into a stack can be done via the push function natively supported with JavaScript arrays. Let's look at some example below:
+
+
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Push
+Stack.prototype.push = function (value) {
+    this.array.push(value);
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+// Add
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+// Result
+stack // Prints "Stack { array: [1, 2, 3] }"
+```
+Time Complexity: $O(1)$
+
+# Deletion (❌📦❌)
+
+Deletion can also be implemented using a native JavaScript array method, called pop or pop(). Let's look at some example below:
+
+
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Push
+Stack.prototype.push = function (value) {
+    this.array.push(value);
+}
+
+// Pop
+Stack.prototype.pop = function () {
+    this.array.pop();
+}
+
+// Log
+Stack.prototype.log = function (stack) {
+    return stack;
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+// Add
+stack.push(1); // Add 1
+stack.push(2); // Add 2
+stack.push(3); // Add 3
+
+// Delete
+stack.pop(); // Delete 3
+stack.pop(); // Delete 2
+stack.pop(); // Delete 1
+
+// Result
+stack.log(stack) // Prints "Stack { array: [] }"
+```
+Time Complexity: $ O(1) $
+
+
+## Access (⬅️📦➡️)
+
+Accessing specific elements in a data structure is important. Let’s take a look at how to access an element based on order below:
+
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Buffer
+// Note: A buffer in the code below is use create a copy of an array to prevent the modification of the original array.
+Stack.prototype.getBuffer = function () {
+    return this.array.slice();
+}
+
+// Push
+Stack.prototype.push = function (value) {
+    this.array.push(value);
+}
+
+// Pop
+Stack.prototype.pop = function () {
+    return this.array.pop();
+}
+
+// Access
+function stackAccessNthTopNode(stack, n) {
+    var bufferArray = stack.getBuffer();
+    if (n <= 0) throw "error";
+
+    var bufferStack = new Stack(bufferArray)
+
+    while (--n !== 0) {
+        bufferStack.pop();
+    }
+
+    return bufferStack.pop();
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+stack.push(3);
+stack.push(2);
+stack.push(1);
+
+// Result
+stackAccessNthTopNode(stack, 3); // Prints "3"
+```
+Time Complexity: $ O(1) $
+
+## Search (🔎📦🔍)
+
+Searching the stack data structure for a specific element is critical. To do this, you must first create a buffer stack so that pop can be called. This way, the original stack is not mutated, and nothing is removed from it. Let's see at some example below:
+
+```javascript
+// Stack
+function Stack(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Buffer
+Stack.prototype.getBuffer = function () {
+    return this.array.slice();
+}
+
+// Empty
+Stack.prototype.isEmpty = function () {
+    return this.array.length == 0;
+}
+
+// Push
+Stack.prototype.push = function (value) {
+    this.array.push(value);
+}
+
+// Pop
+Stack.prototype.pop = function () {
+    return this.array.pop();
+}
+
+// Search
+function stackSearch(stack, element) {
+    var bufferArray = stack.getBuffer();
+
+    var bufferStack = new Stack(bufferArray)
+
+    while (!bufferStack.isEmpty()) {
+        if (bufferStack.pop() == element) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Instance(example) of the "Stack" class
+var stack = new Stack([]);
+
+// Add
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+// Result
+stackSearch(stack, 3); // Prints "true"
+```
+Time Complexity: $O(1)$
+
+
+## Queues (❌➡️)
+
+A queue is also a data structure, but you can remove only the first added element. This is a principle known as First In, First Out (FIFO). A queue is also great because of the constant time. Similar to a stack, it has limitations because only one item can be accessed at a time. Queues should be used when you need to work in the FIFO form to access the first added element.
+
+In JavaScript, arrays have methods that define the queue: shift() and push(). shift() method on an array in JavaScript removes and returns the first element of the array. Adding to a queue is commonly known as enqueuing , and removing from a queue is known as dequeuing. shift() can be used for dequeue, and .push() can be used for enqueue. Here is some skeleton code to start:
+
+```javascript
+// Queue
+function Queue(array) {
+    this.array = [];
+    if(array) this.array = array;
+}
+
+// Buffer
+Queue.prototype.getBuffer = function () {
+    return this.array.slice();
+}
+
+// Empty
+Queue.prototype.isEmpty = function () {
+    return this.array.length == 0;
+}
+
+// Instance(example) of the queue class
+var queue = new Queue([]);
+
+// Result
+queue; // Prints "Stack { array: [] }"
+```
+
+## Peek (🔍📦🔎)
+
+The peek function looks at the first item. In the stack implementation, the last element in the array was returned, but a queue returns the first element in the array because of FIFO. Let's look at some example below:
+
+```javascript
+// Queue
+function Queue(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Insertion for a queue is known as enqueue
+Queue.prototype.enqueue = function (value) {
+    this.array.push(value);
+}
+
+// Peek
+Queue.prototype.peek = function () {
+    return this.array[0];
+}
+
+// Instance(example) of the queue class
+var queue = new Queue([]);
+
+// Add
+queue.enqueue(1); // Add 1
+queue.enqueue(2); // Add 2
+queue.enqueue(3); // Add 3
+
+// Result
+queue.peek(); // Prints "1"
+```
+
+## Insertion (➡️📦⬅️)
+
+As mentioned, insertion for a queue is known as enqueue. The push() method can be used to implement enqueue. Let's look at some example below:
+
+```javascript
+// Queue
+function Queue(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Insertion for a queue is known as enqueue
+Queue.prototype.enqueue = function (value) {
+    this.array.push(value);
+}
+
+// Instance(example) of the queue class
+var queue = new Queue([])
+
+// Add
+queue.enqueue(1); // Add 1
+queue.enqueue(2); // Add 2
+queue.enqueue(3); // Add 3
+
+// Result
+queue; // Prints "Stack { array: [1, 2, 3] }"
+```
+Time Complexity: $O(1)$
+
+## Deletion (❌📦❌)
+
+
+As mentioned, deletion for a queue is also known as dequeue. The shift() method can be used to remove the first element in the queue. Let's see at some example below:
+
+```javascript
+// Queue
+function Queue(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Insertion for a queue is known as enqueue
+Queue.prototype.enqueue = function (value) {
+    this.array.push(value);
+}
+
+// Deletion for a queue also is known as dequeue
+Queue.prototype.dequeue = function () {
+    return this.array.shift();
+}
+
+// Buffer
+Queue.prototype.getBuffer = function () {
+    return this.array.slice();
+}
+
+// Access
+function queueAccessNthTopNode(queue, n) {
+    var bufferArray = queue.getBuffer();
+    if (n <= 0) throw "Error";
+
+    var bufferQueue = new Queue(bufferArray);
+
+    while (--n !== 0) {
+        bufferQueue.dequeue();
+    }
+    return bufferQueue.dequeue();
+}
+
+// Instance(example) of the queue class
+var queue = new Queue([])
+
+// Add
+queue.enqueue(1); // Add 1
+queue.enqueue(2); // Add 2
+queue.enqueue(3); // Add 3
+
+// Result
+queueAccessNthTopNode(queue, 3) // Prints "3"
+```
+Time Complexity: $O(n)$
+
+## Search (🔎📦🔍)
+
+You might need to search a queue to check whether an element exists. Again, this involves creating a buffer queue first to avoid modifications to the original queue. Let's look at some example below:
+
+```javascript
+// Queue
+function Queue(array) {
+    this.array = [];
+    if (array) this.array = array;
+}
+
+// Insertion for a queue is known as enqueue
+Queue.prototype.enqueue = function (value) {
+    this.array.push(value);
+}
+
+// Deletion for a queue also is known as dequeue
+Queue.prototype.dequeue = function () {
+    return this.array.shift();
+}
+
+// Buffer
+Queue.prototype.getBuffer = function () {
+    return this.array.slice();
+}
+
+// Empty
+Queue.prototype.isEmpty = function () {
+    return this.array.length == 0;
+}
+
+// Search
+function queueSearch(queue, element) {
+    var bufferArray = queue.getBuffer();
+
+    var bufferQueue = new Queue(bufferArray);
+    while (!bufferQueue.isEmpty()) {
+        if (bufferQueue.dequeue() == element) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Instance(example) of the queue class
+var queue = new Queue([])
+
+// Add
+queue.enqueue(1); // Add 1
+queue.enqueue(2); // Add 2
+queue.enqueue(3); // Add 3
+
+// Result
+queueSearch(queue, 3) // Prints "true"
+```
+Time Complexity: $O(n)$
+

@@ -1,0 +1,136 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-7]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-7].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# JavaScript Memory Management(😱 🔥 💾)
+
+A variable takes up some memory. In C, the programmer allocate and deallocate memory manually. In contrast, modern JavaScript engines have garbage collectors that delete unused variables. However, there are pitfalls(unexpected) that developers can fall into(❗) This part will show these unexpected and present techniques to help the garbage collector minimize the memory problems. (😉)
+
+---
+
+## Memory Leaks (💾💾)
+
+A memory leak is a failure in a program causing impaired
+performance and even failure. Memory leaks can happen when garbage collectors do not free memory properly. Follow the key principles in this part to avoid memory leaks:
+
+## Reference to an Object (📦➡️📦)
+
+In this example, say the memory() function returns 5KB of data:
+
+
+```javascript
+var foo = {
+    bar1: memory(), // 5kb
+    bar2: memory() // 5kb
+}
+
+function clickEvent(){
+    return foo.bar1[0]
+}
+
+clickEvent()
+```
+
+You might expect the clickEvent() function to use 5KB of memory since it is only referencing bar1 from the foo object (😏). The truth is (😌), it is using 10KB of memory since it has to load the whole foo object into the function’s scope to access the bar1 property. (😃)
+
+
+## Leaking DOM (💦👌👈)
+
+If a variable pointing to a DOM element declared outside of an event callback, then it is in memory leaks if the element is deleted. In this example, there are two elements selected by document.getElementByID:
+
+```html
+<div id="one">One</div>
+<div id="two">Two</div>
+```
+The event listener will cause the two to disappear from the web. However, the reference to it will remain in event callback. This is a memory leak and should be avoided. (⚠️)
+
+This can easily be fixed so that it won’t cause a memory leak, as shown here:
+
+```javascript
+var one = document.getElementById("one");
+
+one.addEventListener('click', function () {
+    var two = document.getElementById("two");
+    two.remove();
+});
+
+
+```
+
+
+## Global window Object (🌏🔍📦)
+
+If an object is on the global window object, it is in memory(meaning it is store in a memory). Any objects declared as a property of window will not be cleared. Remember that any global variable declared will be set as a property of the window object. In this example, there are one global variables declared:
+
+
+
+```javascript
+
+var a = "apples"; //global variable
+
+console.log(window.a); // prints "apples"
+```
+
+# Limiting Object References (📏📦➡️)
+
+An object is cleared when all references are cleared. Always remember to pull the property of an object instead of the entire object. This is because the object’s memory footprint can be very
+large. If only one of the object’s properties is needed, you should avoid using the entire object as a parameter.
+
+```javascript
+var test = {
+    prop1: 'test'
+}
+
+function printProp1(test) {
+    return test.prop1;
+}
+
+printProp1(test); // Prints 'test'
+
+```
+Instead, do this(pass the property like this)(🌻):
+
+
+```javascript
+var test = {
+    prop1: 'test'
+}
+
+function printProp1(prop1) {
+    return prop1;
+}
+
+printProp1(test.prop1); // Prints 'test'
+```
+
+## The delete Operator (❌❌❌)
+
+
+Always remember that the delete operator can be used to delete an unwanted object property (though it does not work on non-objects). Here's an example:
+
+```javascript
+var test = {
+    prop1: 'test'
+}
+
+console.log(test.prop1); // Prints 'test'
+
+delete test.prop1;
+
+console.log(test.prop1); // Prints 'undefined'
+
+```
+
+## Summary (📚)
+
+Although memory in JavaScript is not allocated by the programmer, there are still ways to mitigate memory leaks. If the object is in reference, it is in memory(meaning it is store in the memory). Similarly, DOM elements should not be referenced once deleted. In many cases, it is more applicable to pass a property of the object rather than the object itself. Also, be extremely mindful when declaring a global variable.

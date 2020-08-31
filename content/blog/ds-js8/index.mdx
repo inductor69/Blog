@@ -1,0 +1,160 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-9]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-9].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Sets (😱 🔥 📁)
+
+This part focuses on the concepts of sets from both a mathematical definition and on the implementation. Also, Common set operations, as well as their implementations, are covered in great detail (💡). By the end of this part, you will understand how to use JavaScript’s native Set object to set operations. Note, this article is short, think of it as a preparation for the next part. (😉)
+
+---
+
+## Introducing Sets (📁📁)
+
+In layman’s terms, a set is a group of unordered unique (no duplicate) elements. For example, a set of integers may be: ${[1,2,3,4]}$ . What are it's subsets?<br/>
+
+## Insertion (➡️📁⬅️)
+
+Set has one primary function: to check for uniqueness. Set can add items, but duplicates are not allowed. Here is an example:
+
+```javascript
+var exampleSet = new Set();
+console.log(exampleSet.add(1)); // exampleSet: Set {1}
+console.log(exampleSet.add(1)); // exampleSet: Set {1}
+console.log(exampleSet.add(2)); // exampleSet: Set {1, 2}
+
+// Notice that duplicate is not allowed in Sets
+```
+
+Notice that adding the duplicate element does not work for a set. As discussed in the introduction, insertion into a set occurs in constant time. Time Complexity: $O(1)$.
+
+
+## Deletion (❌📁❌)
+
+
+Set can also delete items from the set. Set.delete method returns a boolean type (true or false). Remember: If the element exists in Set and was deleted, it returns true, otherwise false. Here is an example:
+
+
+```javascript
+var exampleSet = new Set();
+console.log(exampleSet.add(1)); // exampleSet: Set {1}
+console.log(exampleSet.delete(1)); // true
+console.log(exampleSet.add(2)); // exampleSet: Set {2}
+
+// Notice that it returns 'true'. Why?
+```
+
+Remember: This is useful to delete items in constant time. Time Complexity: $O(1)$.
+
+
+## Contains (🔎📁🔍)
+
+Set.has method does a $O(1)$ lookup to check whether the element exists within the set. Here is an example:
+
+```javascript
+    
+var exampleSet = new Set();
+console.log(exampleSet.add(1)); // exampleSet: Set {1}
+console.log(exampleSet.has(1)); // true
+console.log(exampleSet.has(2)); // false
+console.log(exampleSet.add(2)); // exampleSet: Set {1, 2}
+console.log(exampleSet.has(2)); // true
+
+// Notice that it returns 'true' and 'false'. Why?
+
+```
+Remember: This is useful to look for items in constant time. Time Complexity: O(1).
+
+## Intersection (➡️❌⬅️)
+
+First, the intersection. This function returns a set with common elements between two sets. Here is an example:
+
+```javascript
+function intersectSets(setA, setB) {
+    var intersection = new Set();
+    for (var elem of setB) {
+        if (setA.has(elem)) {
+            intersection.add(elem);
+        }
+    }
+    return intersection;
+}
+var setA = new Set([1, 2, 3, 4]),
+    setB = new Set([2, 3]);
+intersectSets(setA, setB); // Set {2, 3}
+```
+
+
+
+### isSuperSet (🔎📁🔍)
+
+Second, is "SuperSet" or isSuperSet. This function checks whether a set is a supersetof another. Here is an example:
+
+
+```javascript
+function isSuperset(setA, subset) {
+    for (var elem of subset) {
+        if (!setA.has(elem)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+var setA = new Set([1, 2, 3, 4]),
+    setB = new Set([2, 3]),
+    setC = new Set([5]);
+console.log(isSuperset(setA, setB)); // true
+// It's 'true' because setA has all elements that setB does
+console.log(isSuperset(setA, setC)); // false
+// It's 'false' because setA does not contain 5 which setC contains
+```
+
+## Union (🅰️🅱️🆎)
+
+Third, the union. It combines the elements from both sets. This function returns a new set with both elements without duplicates. Here is an example:
+
+```javascript
+function unionSet(setA, setB) {
+    var union = new Set(setA);
+    for (var elem of setB) {
+        union.add(elem);
+    }
+    return union;
+}
+var setA = new Set([1, 2, 3, 4]),
+    setB = new Set([2, 3]),
+    setC = new Set([5]);
+unionSet(setA, setB); // Set {1, 2, 3, 4}
+unionSet(setA, setC); // Set {1, 2, 3, 4, 5}
+
+```
+## Difference (📁➖📁)
+
+Finally and the last, the difference(which is in Mathematics is 'minus/substract'). This function implements the difference operation by making use of the native delete method. Here's an example:
+
+
+```javascript
+    
+function differenceSet(setA, setB) {
+    var difference = new Set(setA);
+    for (var elem of setB) {
+        difference.delete(elem);
+    }
+    return difference;
+}
+var setA = new Set([1, 2, 3, 4]),
+    setB = new Set([2, 3]);
+differenceSet(setA, setB); // Set {1, 4}
+
+// Notice that it returns '{1, 4}'. Why?
+```

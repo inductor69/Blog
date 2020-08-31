@@ -1,0 +1,366 @@
+---
+slug: 'js-guide3'
+title: 'DS In JS [Part-10]'
+date: 2020-06-25T00:00:00.000Z
+author: 'Aditya Kumar'
+published: true
+description: 'Data Structures & Algo [PART-10].'
+categories:
+  - 'javascript'
+banner: './images/banner.jpg'
+bannerCredit: 'Prettier Logo'
+---
+
+
+# Searching and Sorting Algorithm
+
+Searching data and sorting through data are fundamental algorithms. Searching (🔍) refers to iterating over the data structure’s elements to retrieve some data. Sorting (📊) refers to putting the data structure’s elements in order. The searching and sorting algorithms are different.
+
+This part 10 focuses on searching and sorting for arrays. By the end of this part 10, you will understand how to use sorting and searching algorithms for arrays. Also, this article is a bit complicated for beginners, so as much as possible the visual aids is your friend (👀). (😃)
+---
+
+## Searching (🔎🔍)
+
+As mentioned, searching is the task of looking for a specific element inside a data structure. When searching in an array, there are two main techniques: linear and binary searching
+
+Linear searches are flexible because they can be used with both
+sorted and unsorted data. Binary searches are used with sorted data. But Remember: a linear search has a higher time complexity than a binary search. Okay? (😄👍)
+
+## Linear Search (🔎➡️🔢)
+
+
+A linear search works by going through each element of the array one index after another. The following code example is an implementation of a linear search to find out whether 6 and 10 exist within the array:
+
+```javascript
+    
+//iterate through the array and find
+function linearSearch(array, n) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] == n) {
+            return true;
+        }
+    }
+    return false;
+}
+console.log(linearSearch([1, 2, 3, 4, 5, 6, 7, 8, 9], 6)); // true
+console.log(linearSearch([1, 2, 3, 4, 5, 6, 7, 8, 9], 10)); // false
+```
+
+Time Complexity:  $O(n)$
+
+## Binary Search (🔎🔢🔍)
+
+Binary search is a searching algorithm that works on sorted data. Binary searches check the middle value to see whether the desired value is greater(▶️) or smaller(◀️) than it. If the desired value is smaller, this algorithm can search the smaller parts, or it can search the bigger parts if the desired value is bigger. Let's see an example:
+
+
+```javascript
+function binarySearch(array, n) {
+    var MiddleElement = Math.floor(array.length - 1 / 2); // 1 (Middle)
+    var True = true;
+
+    while (True) {
+        // 2 == 2
+        if (n == array[MiddleElement]) {
+            True = false;
+            return array[MiddleElement];
+
+        } else if (n > array[MiddleElement]) {
+            MiddleElement = MiddleElement + 1;
+
+        } else if (n < array[MiddleElement]) {
+            MiddleElement = MiddleElement - 1;
+        } else {
+            return -1;
+        }
+    }
+}
+binarySearch([1, 2, 3, 4], 4); // Prints '4'
+binarySearch([1, 2, 3, 4], 5); // Prints '-1'
+```
+
+The binary search algorithm is fast but can be done only if the array is sorted. If the search element is bigger than the middle element, then middle element plus one. And if the search element is less than the middle element, then middle element minus one.
+
+If the element is smaller than the middle element, it should look in the lower half; if the element is bigger than the middle element, it should look in the upper half. Get it? Don't worry you are more likely to get it in challenge section. (😊)
+
+
+# Sorting (📊📊)
+
+Sorting is one of the most important topics in computer science; it is easier to locate items in a sorted array than in an unsorted array. In this section, different sorting techniques will be explored. We will start with the naive(primative) sorting algorithms and then explore efficient sorting algorithms. I recommend to watch the short clip video (🎥) to solidify your understanding in the following (😃).
+
+```javascript
+    
+var exampleSet = new Set();
+console.log(exampleSet.add(1)); // exampleSet: Set {1}
+console.log(exampleSet.has(1)); // true
+console.log(exampleSet.has(2)); // false
+console.log(exampleSet.add(2)); // exampleSet: Set {1, 2}
+console.log(exampleSet.has(2)); // true
+
+// Notice that it returns 'true' and 'false'. Why?
+
+```
+
+## Bubble Sort
+
+Bubble sorting simply swaps elements if one is bigger than the other.
+
+```javascript
+function bubbleSort(array) {
+    for (var i = 0, arrayLength = array.length; i < arrayLength; i++) {
+        for (var j = 0; j <= i; j++) {
+            if (array[i] < array[j]) {
+                swap(array, i, j);
+            }
+        }
+    }
+    return array;
+}
+bubbleSort([6, 1, 2, 3, 4, 5]); // [1,2,3,4,5,6]
+```
+Time Complexity: $O(n^2)$
+
+Space Complexity: $O(1)$
+
+Bubble sort is the worst type of sort because it compares every pair possible. And because bubble sort uses nested loops, it has a time complexity of $O(n^2)$.
+
+## Selection Sort
+
+Selection sorting works by scanning the smallest element and inserting it into the current position of the array. This algorithm is marginally(slightly) better than bubble sort.
+
+
+```javascript
+function selectionSort(items) {
+    var len = items.length,
+        min;
+
+    for (var i = 0; i < len; i++) {
+        // set minimum to this position
+        min = i;
+        //check the rest of the array to see if anything is smaller
+        for (var j = i + 1; j < len; j++) {
+            if (items[j] < items[min]) {
+                min = j;
+            }
+        }
+        //if the minimum isn't in the position, swap it
+        if (i != min) {
+            swap(items, i, min);
+        }
+    }
+
+    return items;
+}
+selectionSort([6, 1, 23, 4, 2, 3]); // [1, 2, 3, 4, 6, 2]
+```
+Time Complexity: $O(n^2)$
+
+Space Complexity: $O(1)$
+
+The time complexity for selection sort is still $O(n^2)$ because of the nested for loop.
+
+## Insertion Sort
+
+
+Insertion sort works similarly to selection sort by moving the unsorted items into a sorted sublist on the left side of the array.
+
+```javascript
+function insertionSort(items) {
+    var len = items.length, // number of items in the array
+        value, // the value currently being compared
+        i, // index into unsorted section
+        j; // index into sorted section
+
+    for (i = 0; i < len; i++) {
+        // store the current value because it may shift later
+        value = items[i];
+
+        // Whenever the value in the sorted section is greater than the value
+        // in the unsorted section, shift all items in the sorted section
+        // over by one. This creates space in which to insert the value.
+
+        for (j = i - 1; j > -1 && items[j] > value; j--) {
+            items[j + 1] = items[j];
+        }
+        items[j + 1] = value;
+    }
+    return items;
+}
+insertionSort([6, 1, 23, 4, 2, 3]); // [1, 2, 3, 4, 6, 2]
+
+```
+
+Time Complexity: $O(n^2)$
+Space Complexity: $O(1)$
+
+Again, this sorting algorithm has a quadratic time complexity of $O(n^2)$ like bubble and insertion sort because of the nested for loop.
+
+## Quicksort
+
+Quicksort works by obtaining a pivot and partitioning the array around it until everything is sorted. The ideal pivot is the median of the array since it will partition the array evenly but getting the median of an unsorted array. Hence, a pivot is typically obtained by taking the median value of the first, middle, and last elements.
+
+This sort is a recursive one and uses the divide-and-conquer methodology to break the quadratic complexity and get the time complexity down to $O(n log_2(n))$. However, with a pivot that partitions everything on one side, the time complexity is worse case: $O(n^2)$
+
+```javascript
+function quickSort(items) {
+    return quickSortHelper(items, 0, items.length - 1);
+}
+
+function quickSortHelper(items, left, right) {
+    var index;
+    if (items.length > 1) {
+        index = partition(items, left, right);
+
+        if (left < index - 1) {
+
+            quickSortHelper(items, left, index - 1);
+        }
+
+        if (index < right) {
+            quickSortHelper(items, index, right);
+        }
+    }
+    return items;
+}
+
+function partition(array, left, right) {
+    var pivot = array[Math.floor((right + left) / 2)];
+    while (left <= right) {
+        while (pivot > array[left]) {
+            left++;
+        }
+        while (pivot < array[right]) {
+            right--;
+        }
+        if (left <= right) {
+            var temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+            left++;
+            right--;
+        }
+    }
+    return left;
+}
+
+quickSort([6, 1, 23, 4, 2, 3]); // [1, 2, 3, 4, 6, 2]
+```
+Time Complexity: $O(nlog_2(n))$ on average, and sometimes $O(n^2)$ for worst case.
+
+Space Complexity: $O(nlog_2(n))$
+
+One downside about a quicksort algorithm is that it could potentially be $O(n^2)$ if a bad pivot is always picked. A bad pivot is one that it does not partition the array evenly. The ideal pivot is the median element of the array. In addition, a quicksort algorithm takes a bigger space complexity of $O(nlog_2(n))$
+
+## Quickselect
+
+Quickselect is a selection algorithm to find the smallest element in an unordered list. Quickselect uses the same approach as a quicksort algorithm. A pivot is chosen, and the array is partitioned. Instead of recursing both sides like quicksort, it recurses only the side for the element.
+
+This reduces the complexity from $O(nlog_2(n))$ to $O(n)$
+
+```javascript
+var array = [1, 3, 3, -2, 3, 14, 7, 8, 1, 2, 2];
+// sorted form: [-2, 1, 1, 2, 2, 3, 3, 3, 7, 8, 14]
+function quickSelectInPlace(A, l, h, k) {
+    var p = partition(A, l, h);
+    if (p == (k - 1)) {
+        return A[p];
+    } else if (p > (k - 1)) {
+        return quickSelectInPlace(A, l, p - 1, k);
+    } else {
+        return quickSelectInPlace(A, p + 1, h, k);
+    }
+}
+
+function partition(array, left, right) {
+    var pivot = array[Math.floor((right + left) / 2)];
+    while (left <= right) {
+        while (pivot > array[left]) {
+            left++;
+        }
+        while (pivot < array[right]) {
+            right--;
+        }
+        if (left <= right) {
+            var temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+            left++;
+            right--;
+        }
+    }
+    return left;
+}
+
+quickSelectInPlace(array, 0, array.length - 1, 5); // 2
+// 2 - because it's the fifth smallest element
+quickSelectInPlace(array, 0, array.length - 1, 10); // 7
+// 7 - because it's the tenth smallest element
+```
+Time Complexity: $O(n)$
+
+## Merge Sort
+
+Mergesort works by dividing the array into subarrays until each array has one element. Then, each subarray is merged in a sorted order.
+
+The merge function should add all the elements in sorted order. To do this, you can study this code, this the merge function, the merging function works by taking the two arrays (left and right) and merging them into one array. The elements need to be compared as they get merged to order.
+
+```javascript
+function merge(leftA, rightA) {
+    var results = [], leftIndex = 0, rightIndex = 0;
+
+    while (leftIndex < leftA.length && rightIndex < rightA.length) {
+        if (leftA[leftIndex] < rightA[rightIndex]) {
+            results.push(leftA[leftIndex++]);
+        } else {
+            results.push(rightA[rightIndex++]);
+        }
+    }
+    var leftRemains = leftA.slice(leftIndex),
+        rightRemains = rightA.slice(rightIndex);
+
+    // add remaining to resultant array
+    return results.concat(leftRemains).concat(rightRemains);
+}
+
+```
+Now, the mergeSort function has to partition the array into two separate arrays and recursively call merge function. Look at the example code below:
+
+```javascript
+function mergeSort(array) {
+
+    if (array.length < 2) {
+        return array; // Base case: array is now sorted since it's just 1 element
+    }
+
+    var midpoint = Math.floor((array.length) / 2),
+        leftArray = array.slice(0, midpoint),
+        rightArray = array.slice(midpoint);
+
+    return merge(mergeSort(leftArray), mergeSort(rightArray));
+}
+mergeSort([6, 1, 23, 4, 2, 3]); // [1, 2, 3, 4, 6, 23]
+
+```
+
+Time Complexity: $O(nlog_2(n))$
+
+Space Complexity: $O(n)$
+
+Mergesort has a large space complexity of $O(n)$ because of the need to create nn number of arrays to be merged later. Use mergesort when a stable sort is needed. A stable sort is one that’s guaranteed not to reorder elements with identical keys. A disadvantage of mergesort is that it uses $O(n)$ in space. (😲)
+
+## JavaScript's Built-In Sort
+
+JavaScript has a built-in sort() method for an array which sorts elements by ascending order. However, the function sorts alphabetically, so it will not work for numbers. (😔) Consider the code below:
+
+```javascript
+var array = [12, 3, 4, 2, 1, 34, 23];
+
+function comparatorNumber(a, b) {
+    return a - b;
+}
+
+array.sort(comparatorNumber);
+ // array: [1, 2, 3, 4, 12, 23, 34]
+
+```
+<b>a-b</b> indicates that it should be from smallest to biggest (ascending). 
+If you want a descending order, do <b> b-a </b>
